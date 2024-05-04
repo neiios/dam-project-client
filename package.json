@@ -1,6 +1,6 @@
 {
-  "name": "damproject",
-  "version": "1.0.0",
+  "name": "dam-project-client",
+  "version": "0.0.69",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "damproject",
-    "slug": "damproject",
-    "version": "1.0.0",
+    "name": "dam-project-client",
+    "slug": "dam-project-client",
+    "version": "0.0.69",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
