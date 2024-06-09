@@ -29,7 +29,7 @@ export default function SigninPage() {
     <View className="flex-1 justify-center p-4">
       <Text className="text-2xl font-bold mb-6 text-center">Sign In</Text>
       <TextInput
-        className="h-10 border border-gray-300 mb-3 px-2"
+        className="h-10 border border-gray-300 mb-1 px-2"
         placeholder="Username"
         value={username}
         onChangeText={setUsername}

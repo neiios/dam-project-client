@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, ScrollView } from "react-native";
 
 const conferenceData = [
   {
@@ -24,26 +24,33 @@ export default function Index() {
   const router = useRouter();
 
   return (
-    <View className="bg-white p-4 gap-8">
-      <Text className="text-2xl font-bold">
-        Choose the conference you are interested in...
-      </Text>
-      <View className="gap-4">
-        {conferenceData.map((conference) => (
-          <View className="bg-gray-100 p-4 rounded-xl" key={conference.key}>
-            <Text className="text-2xl">{conference.title}</Text>
-            <View className="flex-row justify-between">
-              <Text>{conference.date}</Text>
-              <Text>{conference.location}</Text>
+    <ScrollView>
+      <View className="p-5 flex gap-y-5">
+        <Text className="text-2xl font-bold">
+          Choose the conference you are interested in...
+        </Text>
+        <View className="flex gap-y-5 w-full">
+          {conferenceData.map((conference) => (
+            <View
+              className="bg-gray-200 p-4 rounded-xl flex gap-y-2"
+              key={conference.key}
+            >
+              <Text className="text-xl font-bold">{conference.title}</Text>
+              <View className="flex-row gap-x-2">
+                <Text>{conference.date}</Text>
+                <Text>{conference.location}</Text>
+              </View>
+              <Text>{conference.description}</Text>
+              <View>
+                <Button
+                  title="Go to Details"
+                  onPress={() => router.push("/conference")}
+                />
+              </View>
             </View>
-            <Text>{conference.description}</Text>
-            <Button
-              title="Go to Details"
-              onPress={() => router.push("/conference")}
-            />
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
