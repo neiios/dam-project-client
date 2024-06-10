@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Button, Linking } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import React from "react";
 
@@ -8,8 +8,13 @@ export default function Map() {
     long: -122.4324,
   });
 
+  const handleGoToMaps = () => {
+    const url = `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.long}`;
+    Linking.openURL(url);
+  };
+
   return (
-    <View className="w-full h-full bg-red-300">
+    <View className="w-full h-full bg-red-300 relative flex items-center">
       <MapView
         className="w-full h-full"
         initialRegion={{
@@ -26,6 +31,15 @@ export default function Map() {
           }}
         />
       </MapView>
+      <View className="absolute top-5">
+        <Text
+          className="rounded-md bg-white p-3 font-bold text-sm border-2 border-transparent active:border-sky-200"
+          icon="map"
+          onPress={handleGoToMaps}
+        >
+          Open in Google Maps
+        </Text>
+      </View>
     </View>
   );
 }
