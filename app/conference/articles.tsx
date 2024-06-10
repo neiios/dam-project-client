@@ -13,7 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { articles } from "@/assets/data";
 
 export default function Articles() {
-  const [searchQuery, onChangeQuery] = React.useState(null);
+  const [searchQuery, onChangeQuery] = React.useState<string>("");
 
   const router = useRouter();
   return (

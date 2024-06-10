@@ -34,7 +34,6 @@ export default function Map() {
       <View className="absolute top-5">
         <Text
           className="rounded-md bg-white p-3 font-bold text-sm border-2 border-transparent active:border-sky-200"
-          icon="map"
           onPress={handleGoToMaps}
         >
           Open in Google Maps

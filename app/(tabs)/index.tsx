@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useRouter } from "expo-router";
+import { Link } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import {
   Text,
   View,
@@ -8,29 +9,7 @@ import {
   Image,
   RefreshControl,
 } from "react-native";
-
-interface Track {
-  id: number;
-  name: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  conferenceId: number;
-}
-
-interface Conference {
-  id: number;
-  name: string;
-  longitude: string;
-  latitude: string;
-  startDate: string;
-  endDate: string;
-  imageUrl: string;
-  description: string;
-  location?: string;
-  tracks?: Track[];
-  city?: string;
-}
+import { Conference } from "@/types";
 
 const formatDateRange = (startDate: string, endDate: string) => {
   const start = new Date(startDate);
@@ -66,7 +45,7 @@ const fetchCityName = async (
 };
 
 export default function FeedScreen() {
-  const router = useRouter();
+  const navigation = useNavigation();
   const [conferenceData, setConferenceData] = useState<Conference[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -116,13 +95,15 @@ export default function FeedScreen() {
       <View>
         <View className="flex w-full">
           {conferenceData.map((conference, index) => (
-            <TouchableOpacity
+            <Link
               key={conference.id}
-              onPress={() => router.push(`/conference`)}
+              href={{
+                pathname: "/conference",
+                params: { id: conference.id },
+              }}
               className={`border-b-2 border-slate-100 ${
                 index === conferenceData.length - 1 ? "border-b-0" : ""
               }`}
-              activeOpacity={1}
             >
               <View className="p-5 flex-row items-center justify-between">
                 <View className="flex gap-y-2 w-44">
@@ -132,7 +113,7 @@ export default function FeedScreen() {
                       conference.tracks.map((track) => (
                         <View
                           className="bg-sky-100 rounded-md p-1"
-                          key={track.name}
+                          key={track.id}
                         >
                           <Text className="text-xs font-semibold">
                             {track.name}
@@ -152,7 +133,7 @@ export default function FeedScreen() {
                   }}
                 />
               </View>
-            </TouchableOpacity>
+            </Link>
           ))}
         </View>
       </View>
