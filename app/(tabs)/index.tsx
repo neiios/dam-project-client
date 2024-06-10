@@ -1,15 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
-import {
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  RefreshControl,
-} from "react-native";
-import { Conference } from "@/types";
+import { Text, View, ScrollView, Image, RefreshControl } from "react-native";
+import { Conference, Track } from "@/types";
+import { truncateTrackList } from "@/core/utils";
 
 const formatDateRange = (startDate: string, endDate: string) => {
   const start = new Date(startDate);
@@ -28,25 +22,10 @@ const formatDateRange = (startDate: string, endDate: string) => {
   return `${month} ${startDay}-${endDay} ${end.getFullYear()}`;
 };
 
-const fetchCityName = async (
-  latitude: string,
-  longitude: string
-): Promise<string> => {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
-  );
-  const data = await response.json();
-  return (
-    data.address.city ||
-    data.address.town ||
-    data.address.village ||
-    "Unknown location"
-  );
-};
-
 export default function FeedScreen() {
   const navigation = useNavigation();
   const [conferenceData, setConferenceData] = useState<Conference[]>([]);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchConferenceData = async () => {
@@ -59,14 +38,15 @@ export default function FeedScreen() {
       }
       const data: Conference[] = await response.json();
 
+      const extractedTracks: Track[] = data.flatMap(
+        (conference) => conference.tracks!
+      );
+      setTracks(extractedTracks);
+
       // Fetch city names for each conference
       const dataWithCityNames = await Promise.all(
         data.map(async (conference) => {
-          const cityName = await fetchCityName(
-            conference.latitude,
-            conference.longitude
-          );
-          return { ...conference, city: cityName };
+          return conference;
         })
       );
 
@@ -109,17 +89,11 @@ export default function FeedScreen() {
                 <View className="flex gap-y-2 w-44">
                   <Text className="text-lg font-bold">{conference.name}</Text>
                   <View className="flex flex-row gap-x-2">
-                    {conference.tracks &&
-                      conference.tracks.map((track) => (
-                        <View
-                          className="bg-sky-100 rounded-md p-1"
-                          key={track.id}
-                        >
-                          <Text className="text-xs font-semibold">
-                            {track.name}
-                          </Text>
-                        </View>
-                      ))}
+                    {truncateTrackList(tracks).map((track) => (
+                      <View className="bg-sky-100 rounded-md p-1" key={track}>
+                        <Text className="text-xs font-semibold">{track}</Text>
+                      </View>
+                    ))}
                   </View>
                   <Text className="text-xs text-slate-500">
                     {formatDateRange(conference.startDate, conference.endDate)}{" "}
