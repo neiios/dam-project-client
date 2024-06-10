@@ -1,6 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "expo-router";
-import { Text, View, ScrollView, TouchableOpacity, Image } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  RefreshControl,
+} from "react-native";
+
+interface Track {
+  id: number;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  conferenceId: number;
+}
 
 interface Conference {
   id: number;
@@ -12,7 +28,7 @@ interface Conference {
   imageUrl: string;
   description: string;
   location?: string;
-  tracks?: string[];
+  tracks?: Track[];
   city?: string;
 }
 
@@ -52,42 +68,52 @@ const fetchCityName = async (
 export default function FeedScreen() {
   const router = useRouter();
   const [conferenceData, setConferenceData] = useState<Conference[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchConferenceData = async () => {
+    try {
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data: Conference[] = await response.json();
+
+      // Fetch city names for each conference
+      const dataWithCityNames = await Promise.all(
+        data.map(async (conference) => {
+          const cityName = await fetchCityName(
+            conference.latitude,
+            conference.longitude
+          );
+          return { ...conference, city: cityName };
+        })
+      );
+
+      setConferenceData(dataWithCityNames);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchConferenceData = async () => {
-      try {
-        const response = await fetch(
-          `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data: Conference[] = await response.json();
-
-        // Fetch city names for each conference
-        const dataWithCityNames = await Promise.all(
-          data.map(async (conference) => {
-            const cityName = await fetchCityName(
-              conference.latitude,
-              conference.longitude
-            );
-            return { ...conference, city: cityName };
-          })
-        );
-
-        setConferenceData(dataWithCityNames);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchConferenceData();
   }, []);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchConferenceData().finally(() => setRefreshing(false));
+  }, []);
+
   return (
-    <ScrollView className="bg-white">
+    <ScrollView
+      className="bg-white"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View>
-        <Text>sdf{process.env.API_BASE}</Text>
         <View className="flex w-full">
           {conferenceData.map((conference, index) => (
             <TouchableOpacity
@@ -104,8 +130,13 @@ export default function FeedScreen() {
                   <View className="flex flex-row gap-x-2">
                     {conference.tracks &&
                       conference.tracks.map((track) => (
-                        <View className="bg-sky-100 rounded-md p-1" key={track}>
-                          <Text className="text-xs font-semibold">{track}</Text>
+                        <View
+                          className="bg-sky-100 rounded-md p-1"
+                          key={track.name}
+                        >
+                          <Text className="text-xs font-semibold">
+                            {track.name}
+                          </Text>
                         </View>
                       ))}
                   </View>
