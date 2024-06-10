@@ -2,11 +2,11 @@ import { Tabs } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 
-export default function TabLayout() {
+export default function ConferenceTabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#0369a1",
       }}
@@ -21,30 +21,30 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="conferencesMap"
+        name="articles"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <AntDesign color={color} name="copy1" size={24} />
+          ),
+          title: "Articles",
+        }}
+      />
+      <Tabs.Screen
+        name="tracks"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <AntDesign color={color} name="switcher" size={24} />
+          ),
+          title: "Tracks",
+        }}
+      />
+      <Tabs.Screen
+        name="map"
         options={{
           tabBarIcon: ({ color }) => (
             <AntDesign color={color} name="find" size={24} />
           ),
           title: "Map",
-        }}
-      />
-      <Tabs.Screen
-        name="contact"
-        options={{
-          tabBarIcon: ({ color }) => (
-            <AntDesign color={color} name="message1" size={24} />
-          ),
-          title: "Contact",
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          tabBarIcon: ({ color }) => (
-            <AntDesign color={color} name="user" size={24} />
-          ),
-          title: "Settings",
         }}
       />
     </Tabs>

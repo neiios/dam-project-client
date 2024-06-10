@@ -1,5 +1,5 @@
-import { Stack, router } from "expo-router";
-import { Button, Text } from "react-native";
+import { Stack } from "expo-router";
+import React from "react";
 
 export default function RootLayout() {
   return (
@@ -10,16 +10,13 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen name="(tabs)/profile" /> */}
-      {/* <Stack.Screen
-        name="index"
+      <Stack.Screen
+        name="conference"
         options={{
-          headerTitle: (props) => <Text>SciGather</Text>,
-          headerRight: () => (
-            <Button onPress={() => router.push("/signin")} title="Sign In" />
-          ),
+          headerShown: true,
+          title: "Conference",
         }}
-      /> */}
+      />
     </Stack>
   );
 }
