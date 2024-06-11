@@ -6,8 +6,8 @@ import { useFetchData } from "@/core/hooks";
 import { Article } from "@/types";
 import { formatDate } from "@/core/utils";
 import Loader from "@/components/loader";
-import { Title } from "@/components/title";
-import { Header } from "@/components/header";
+import Title from "@/components/title";
+import Header from "@/components/header";
 
 export default function ArticleDetails() {
   const route = useRoute();

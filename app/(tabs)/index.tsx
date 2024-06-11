@@ -7,8 +7,8 @@ import { calculateDuration, formatDateRange } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
 import Map from "../../components/map";
 import Loader from "@/components/loader";
-import { Header } from "@/components/header";
-import { Title } from "@/components/title";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 export default function ConferenceDetails() {
   const route = useRoute();

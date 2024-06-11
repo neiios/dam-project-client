@@ -6,8 +6,8 @@ import { Article, Track } from "@/types";
 import { formatDate, formatTrackDate } from "@/core/utils";
 import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
-import { Header } from "@/components/header";
-import { Title } from "@/components/title";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 // i can't take it anymore
 

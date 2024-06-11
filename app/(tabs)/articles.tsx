@@ -12,8 +12,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { Article } from "@/types";
 import { useRoute } from "@react-navigation/native";
 import { formatDate } from "@/core/utils";
-import { Header } from "@/components/header";
-import { Title } from "@/components/title";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 export default function Articles() {
   const route = useRoute();
@@ -106,7 +106,6 @@ export default function Articles() {
               onChangeText={onChangeQuery}
               placeholder="Search Articles"
               placeholderTextColor="#94a3b8"
-              editable={true}
               className="text-slate-400 w-full box-content border-2 border-slate-100 focus:border-sky-200 rounded-md pl-10 py-2"
               value={searchQuery}
               onSubmitEditing={() => fetchArticles(true)}

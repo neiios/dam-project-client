@@ -5,8 +5,8 @@ import { Conference } from "@/types";
 import { useFetchData } from "@/core/hooks";
 import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
-import { Header } from "@/components/header";
-import { Title } from "@/components/title";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 export default function Tracks() {
   const route = useRoute();
