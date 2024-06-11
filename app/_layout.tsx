@@ -42,6 +42,13 @@ export default function RootLayout() {
           title: "Conference",
         }}
       />
+      <Stack.Screen
+        name="profile"
+        options={{
+          headerShown: true,
+          title: "Profile",
+        }}
+      />
     </Stack>
   );
 }
