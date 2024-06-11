@@ -24,7 +24,7 @@ export const truncateTrackList = (tracks: Track[]) => {
   return truncatedList;
 };
 
-export const formatDate = (startDate: string) => {
+export const formatDate = (startDate: string, endDate?: string) => {
   const start = new Date(startDate);
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
@@ -35,7 +35,25 @@ export const formatDate = (startDate: string) => {
     hour12: true,
   };
 
-  return new Intl.DateTimeFormat("en-US", options).format(start);
+  const startDateFormatted = new Intl.DateTimeFormat("en-US", options).format(
+    start
+  );
+
+  if (endDate) {
+    const end = new Date(endDate);
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    const endDateFormatted = new Intl.DateTimeFormat(
+      "en-US",
+      timeOptions
+    ).format(end);
+    return `${startDateFormatted} - ${endDateFormatted}`;
+  }
+
+  return startDateFormatted;
 };
 
 export const formatDateRange = (startDate: string, endDate: string) => {

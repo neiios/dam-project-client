@@ -7,11 +7,10 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { Article } from "@/types";
-import { useFetchData } from "@/core/hooks";
 import { useRoute } from "@react-navigation/native";
 import { formatDate } from "@/core/utils";
 
@@ -19,24 +18,66 @@ export default function Articles() {
   const route = useRoute();
   const { id } = route.params as { id: string };
 
-  const [searchQuery, onChangeQuery] = React.useState<string>("");
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [searchQuery, onChangeQuery] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  const {
-    data: articles,
-    loading,
-    error,
-    refresh,
-  } = useFetchData<Article[]>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/${id}/articles`
-  );
+  const pageSize = 8;
+
+  const fetchArticles = async (reset: boolean = false) => {
+    if (reset) {
+      setPage(1);
+      setHasMore(true);
+    }
+    if (!hasMore && !reset) return;
+
+    setLoading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const response = await fetch(
+        `http://${
+          process.env.EXPO_PUBLIC_API_BASE
+        }:8080/api/v1/conferences/${id}/articles?pageSize=${pageSize}&page=${
+          reset ? 1 : page
+        }`
+      );
+      const data = await response.json();
+      setArticles((prevArticles) =>
+        reset ? data : [...prevArticles, ...data]
+      );
+      setHasMore(data.length === pageSize);
+      setPage((prevPage) => (reset ? 2 : prevPage + 1));
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchArticles(true);
+  }, [id]);
 
   const onRefresh = useCallback(() => {
-    refresh();
-  }, [refresh]);
+    setRefreshing(true);
+    fetchArticles(true);
+  }, []);
+
+  const handleLoadMore = () => {
+    if (!loading && hasMore) {
+      fetchArticles();
+    }
+  };
 
   const router = useRouter();
 
-  if (loading) {
+  if (loading && !refreshing && articles.length === 0) {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#0000ff" />
@@ -56,8 +97,17 @@ export default function Articles() {
     <ScrollView
       className="bg-white"
       refreshControl={
-        <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
+      onScroll={({ nativeEvent }) => {
+        if (
+          nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >=
+          nativeEvent.contentSize.height - 20
+        ) {
+          handleLoadMore();
+        }
+      }}
+      scrollEventThrottle={5}
     >
       <View>
         <View className="p-5 flex gap-y-4 border-b-2 border-slate-100">
@@ -67,7 +117,7 @@ export default function Articles() {
               onChangeText={onChangeQuery}
               placeholder="Search Articles"
               placeholderTextColor="#94a3b8"
-              editable={articles!.length > 0}
+              editable={articles.length > 0}
               className="text-slate-400 w-full box-content border-2 border-slate-100 focus:border-sky-200 rounded-md pl-10 py-2 "
             />
             <View className="absolute left-2">
@@ -75,15 +125,13 @@ export default function Articles() {
             </View>
           </View>
         </View>
-        <View className="flex w-full ">
+        <View className="flex w-full">
           {articles && articles.length > 0 ? (
             articles.map((article, index) => (
               <TouchableOpacity
                 key={article.id}
                 onPress={() => router.push(`/article`)}
-                className={`border-b-2 border-slate-100 ${
-                  index === articles.length - 1 ? "border-b-0" : ""
-                }`}
+                className="border-b-2 border-slate-100"
                 activeOpacity={1}
               >
                 <View className="flex w-full px-5 py-2">
@@ -91,7 +139,6 @@ export default function Articles() {
                   <Text className="text-lg font-bold mb-2">
                     {article.title}
                   </Text>
-
                   <Text className="text-xs text-slate-500">
                     {formatDate(article.startDate, article.endDate)}
                   </Text>
@@ -103,6 +150,11 @@ export default function Articles() {
               <Text className="text-lg text-center text-slate-500">
                 No articles available
               </Text>
+            </View>
+          )}
+          {hasMore && (
+            <View className="p-5 h-20">
+              {loading && <ActivityIndicator size="large" color="#075985" />}
             </View>
           )}
         </View>
