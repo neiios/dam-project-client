@@ -38,7 +38,7 @@ export default function Articles() {
 
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       const response = await fetch(
         `http://${

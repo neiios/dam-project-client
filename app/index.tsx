@@ -28,8 +28,8 @@ export default function FeedScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View className="bg-white flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#075985" />
       </View>
     );
   }
@@ -56,7 +56,7 @@ export default function FeedScreen() {
               <Link
                 key={conference.id}
                 href={{
-                  pathname: "/conference",
+                  pathname: "/(tabs)",
                   params: { confId: conference.id },
                 }}
                 className="border-b-2 border-slate-100"

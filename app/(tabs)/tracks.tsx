@@ -30,8 +30,8 @@ export default function Tracks() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View className="bg-white flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#075985" />
       </View>
     );
   }
