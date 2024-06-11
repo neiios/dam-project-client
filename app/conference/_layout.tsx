@@ -1,8 +1,12 @@
 import { Tabs } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
+import { useRoute } from "@react-navigation/native";
 
 export default function ConferenceTabLayout() {
+  const route = useRoute();
+  const { id } = route.params;
+
   return (
     <Tabs
       screenOptions={{
@@ -19,6 +23,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Conferences",
         }}
+        initialParams={{ id }}
       />
       <Tabs.Screen
         name="articles"
@@ -28,6 +33,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Articles",
         }}
+        initialParams={{ id }}
       />
       <Tabs.Screen
         name="tracks"
@@ -37,6 +43,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Tracks",
         }}
+        initialParams={{ id }}
       />
       <Tabs.Screen
         name="map"
@@ -46,6 +53,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Map",
         }}
+        initialParams={{ id }}
       />
     </Tabs>
   );
