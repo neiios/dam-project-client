@@ -59,9 +59,7 @@ export default function FeedScreen() {
                   pathname: "/conference",
                   params: { id: conference.id },
                 }}
-                className={`border-b-2 border-slate-100 ${
-                  index === conferences.length - 1 ? "border-b-0" : ""
-                }`}
+                className="border-b-2 border-slate-100"
               >
                 <View className="p-5 flex-row items-center justify-between">
                   <View className="flex gap-y-2 w-52">
