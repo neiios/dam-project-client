@@ -28,9 +28,20 @@ export interface Article {
   endDate: string;
   conferenceId: number;
   trackId: number;
+  track: {
+    id: number;
+    name: string;
+    description: string;
+    conferenceId: number;
+  };
 }
 
 export interface Coordinates {
   latitude: number;
   longitude: number;
+}
+
+export interface PaginationOptions {
+  pageSize?: number;
+  initialPage?: number;
 }

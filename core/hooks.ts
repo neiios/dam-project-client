@@ -1,3 +1,4 @@
+import { PaginationOptions } from "@/types";
 import { useState, useEffect, useCallback } from "react";
 
 export const useFetchData = <T>(url: string) => {

@@ -13,11 +13,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { Article } from "@/types";
 import { useRoute } from "@react-navigation/native";
 import { formatDate } from "@/core/utils";
-import { conference } from "@/assets/data";
 
 export default function Articles() {
   const route = useRoute();
-  const { confId } = route.params as { confId: string };
+  const { id } = route.params as { id: string };
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [searchQuery, onChangeQuery] = useState<string>("");
@@ -43,7 +42,7 @@ export default function Articles() {
       const response = await fetch(
         `http://${
           process.env.EXPO_PUBLIC_API_BASE
-        }:8080/api/v1/conferences/${confId}/articles?pageSize=${pageSize}&page=${
+        }:8080/api/v1/conferences/${id}/articles?pageSize=${pageSize}&page=${
           reset ? 1 : page
         }&searchTerm=${searchQuery}`
       );
@@ -58,9 +57,7 @@ export default function Articles() {
       setHasMore(data.length === pageSize);
       setPage((prevPage) => (reset ? 2 : prevPage + 1));
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
+      setError(error.message);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -69,7 +66,7 @@ export default function Articles() {
 
   useEffect(() => {
     fetchArticles(true);
-  }, [confId, searchQuery]);
+  }, [id, searchQuery]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -124,13 +121,13 @@ export default function Articles() {
                 <Link
                   key={article.id}
                   href={{
-                    pathname: "article",
-                    params: { articleId: article.id, confId: confId },
+                    pathname: "/article",
+                    params: { id: article.id },
                   }}
                   className="border-b-2 border-slate-100"
                 >
                   <View className="flex w-full px-5 py-2">
-                    <View className="flex flex-row gap-x-a2"></View>
+                    <View className="flex flex-row gap-x-2"></View>
                     <Text className="text-lg font-bold mb-2">
                       {article.title}
                     </Text>

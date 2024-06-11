@@ -57,7 +57,7 @@ export default function FeedScreen() {
                 key={conference.id}
                 href={{
                   pathname: "/conference",
-                  params: { id: conference.id },
+                  params: { confId: conference.id },
                 }}
                 className="border-b-2 border-slate-100"
               >

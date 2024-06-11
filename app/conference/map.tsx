@@ -7,14 +7,14 @@ import { useFetchData } from "@/core/hooks";
 
 export default function Map() {
   const route = useRoute();
-  const { id } = route.params as { id: string };
-
+  const { confId } = route.params as { confId: string };
+  console.log(route.params);
   const {
     data: coordinates,
     loading,
     error,
   } = useFetchData<Coordinates>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/${id}/location`
+    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/${confId}/location`
   );
 
   const handleGoToMaps = () => {

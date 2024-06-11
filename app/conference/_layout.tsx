@@ -5,7 +5,7 @@ import { useRoute } from "@react-navigation/native";
 
 export default function ConferenceTabLayout() {
   const route = useRoute();
-  const { id } = route.params;
+  const { confId } = route.params as { confId: string };
 
   return (
     <Tabs
@@ -23,7 +23,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Conferences",
         }}
-        initialParams={{ id }}
+        initialParams={{ confId }}
       />
       <Tabs.Screen
         name="articles"
@@ -33,7 +33,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Articles",
         }}
-        initialParams={{ id }}
+        initialParams={{ confId }}
       />
       <Tabs.Screen
         name="tracks"
@@ -43,7 +43,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Tracks",
         }}
-        initialParams={{ id }}
+        initialParams={{ confId }}
       />
       <Tabs.Screen
         name="map"
@@ -53,7 +53,7 @@ export default function ConferenceTabLayout() {
           ),
           title: "Map",
         }}
-        initialParams={{ id }}
+        initialParams={{ confId }}
       />
     </Tabs>
   );
