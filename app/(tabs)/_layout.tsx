@@ -1,12 +1,16 @@
 import { Tabs } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
+import { useRoute } from "@react-navigation/native";
 
-export default function TabLayout() {
+export default function ConferenceTabLayout() {
+  const route = useRoute();
+  const { confId } = route.params as { confId: string };
+
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#0369a1",
       }}
@@ -19,15 +23,27 @@ export default function TabLayout() {
           ),
           title: "Conferences",
         }}
+        initialParams={{ confId }}
       />
       <Tabs.Screen
-        name="conferencesMap"
+        name="articles"
         options={{
           tabBarIcon: ({ color }) => (
-            <AntDesign color={color} name="find" size={24} />
+            <AntDesign color={color} name="copy1" size={24} />
           ),
-          title: "Map",
+          title: "Articles",
         }}
+        initialParams={{ confId }}
+      />
+      <Tabs.Screen
+        name="tracks"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <AntDesign color={color} name="switcher" size={24} />
+          ),
+          title: "Tracks",
+        }}
+        initialParams={{ confId }}
       />
       <Tabs.Screen
         name="contact"
@@ -37,15 +53,7 @@ export default function TabLayout() {
           ),
           title: "Contact",
         }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          tabBarIcon: ({ color }) => (
-            <AntDesign color={color} name="user" size={24} />
-          ),
-          title: "Settings",
-        }}
+        initialParams={{ confId }}
       />
     </Tabs>
   );

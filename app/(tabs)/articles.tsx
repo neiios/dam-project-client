@@ -102,7 +102,7 @@ export default function Articles() {
     >
       <View>
         <View className="p-5 flex gap-y-4 border-b-2 border-slate-100">
-          <Text className="text-2xl font-bold">Featured articles</Text>
+          <Text className="text-2xl font-bold">Conference articles</Text>
           <View className="relative flex justify-center items-left">
             <TextInput
               onChangeText={onChangeQuery}
