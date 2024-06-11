@@ -49,7 +49,7 @@ export default function FeedScreen() {
                   pathname: "/(tabs)",
                   params: { confId: conference.id },
                 }}
-                className="border-b-2 border-slate-100"
+                className="border-b-2 border-slate-50"
               >
                 <View className="p-5 flex-row items-center justify-between">
                   <View className="flex gap-y-2 w-52">
