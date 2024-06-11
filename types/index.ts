@@ -18,3 +18,19 @@ export interface Conference {
   tracks?: Track[];
   city?: string;
 }
+
+export interface Article {
+  id: number;
+  title: string;
+  authors: string;
+  abstract: string;
+  startDate: string;
+  endDate: string;
+  conferenceId: number;
+  trackId: number;
+}
+
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
