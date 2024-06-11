@@ -6,6 +6,8 @@ import { Article, Track } from "@/types";
 import { formatDate, formatTrackDate } from "@/core/utils";
 import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
+import { Header } from "@/components/header";
+import { Title } from "@/components/title";
 
 // i can't take it anymore
 
@@ -52,9 +54,9 @@ export default function TrackDetails() {
     <ScrollView className="bg-white">
       <View>
         <View>
-          <View className="p-5 flex gap-y-4 border-b-2 border-slate-100">
-            <Text className="text-2xl font-bold">Track agenda</Text>
-          </View>
+          <Header>
+            <Title>Track agenda</Title>
+          </Header>
 
           <View className=" border-b-2 border-slate-100 p-5">
             <Text className="text-xl font-bold ">Description</Text>

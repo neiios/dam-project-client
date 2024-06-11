@@ -5,6 +5,8 @@ import { Conference } from "@/types";
 import { useFetchData } from "@/core/hooks";
 import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
+import { Header } from "@/components/header";
+import { Title } from "@/components/title";
 
 export default function Tracks() {
   const route = useRoute();
@@ -44,9 +46,9 @@ export default function Tracks() {
     >
       <View>
         <View>
-          <View className="p-5 flex gap-y-4 border-b-2 border-slate-100">
-            <Text className="text-2xl font-bold">Conference tracks</Text>
-          </View>
+          <Header>
+            <Title>Conference tracks</Title>
+          </Header>
           <View className="flex w-full gap-y-4 p-5">
             {tracks && tracks.length > 0 ? (
               tracks.map((track, index) => (

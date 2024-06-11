@@ -12,6 +12,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { Article } from "@/types";
 import { useRoute } from "@react-navigation/native";
 import { formatDate } from "@/core/utils";
+import { Header } from "@/components/header";
+import { Title } from "@/components/title";
 
 export default function Articles() {
   const route = useRoute();
@@ -80,8 +82,6 @@ export default function Articles() {
     }
   };
 
-  const router = useRouter();
-
   return (
     <ScrollView
       className="bg-white"
@@ -99,9 +99,9 @@ export default function Articles() {
       scrollEventThrottle={10}
     >
       <View>
-        <View className="p-5 flex gap-y-4 border-b-2 border-slate-100">
-          <Text className="text-2xl font-bold">Conference articles</Text>
-          <View className="relative flex justify-center items-left">
+        <Header>
+          <Title>Conference articles</Title>
+          <View className="relative flex justify-center items-left mt-5">
             <TextInput
               onChangeText={onChangeQuery}
               placeholder="Search Articles"
@@ -115,7 +115,8 @@ export default function Articles() {
               <AntDesign color="#94a3b8" name="search1" size={20} />
             </View>
           </View>
-        </View>
+        </Header>
+
         <View className="flex w-full gap-y-4 p-5">
           {articles && articles.length > 0
             ? articles.map((article, index) => (

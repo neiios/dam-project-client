@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface Track {
   id: number;
   name: string;
@@ -63,4 +65,8 @@ export interface Coordinates {
 export interface PaginationOptions {
   pageSize?: number;
   initialPage?: number;
+}
+
+export interface HeaderProps {
+  children: ReactNode;
 }
