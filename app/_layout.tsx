@@ -18,6 +18,13 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
+        name="article"
+        options={{
+          headerShown: true,
+          title: "Article",
+        }}
+      />
+      <Stack.Screen
         name="conference"
         options={{
           headerShown: true,

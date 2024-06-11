@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
@@ -23,7 +17,6 @@ export default function ArticleDetails() {
     data: article,
     loading,
     error,
-    refresh,
   } = useFetchData<Article>(
     `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/${confId}/articles/${articleId}`
   );
@@ -45,12 +38,7 @@ export default function ArticleDetails() {
   }
 
   return (
-    <ScrollView
-      className="bg-white"
-      refreshControl={
-        <RefreshControl refreshing={loading} onRefresh={refresh} />
-      }
-    >
+    <ScrollView className="bg-white">
       <View>
         <View className="p-5 flex gap-y-5">
           <Text className="text-2xl capitalize font-bold">
