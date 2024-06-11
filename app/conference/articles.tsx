@@ -2,22 +2,63 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   TouchableOpacity,
   TextInput,
+  RefreshControl,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-
-import { articles } from "@/assets/data";
+import { Article } from "@/types";
+import { useFetchData } from "@/core/hooks";
+import { useRoute } from "@react-navigation/native";
+import { formatDate } from "@/core/utils";
 
 export default function Articles() {
+  const route = useRoute();
+  const { id } = route.params as { id: string };
+
   const [searchQuery, onChangeQuery] = React.useState<string>("");
 
+  const {
+    data: articles,
+    loading,
+    error,
+    refresh,
+  } = useFetchData<Article[]>(
+    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/${id}/articles`
+  );
+
+  const onRefresh = useCallback(() => {
+    refresh();
+  }, [refresh]);
+
   const router = useRouter();
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-lg text-red-500">Error: {error}</Text>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView className="bg-white">
+    <ScrollView
+      className="bg-white"
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+      }
+    >
       <View>
         <View className="p-5 flex gap-y-4 border-b-2 border-slate-100">
           <Text className="text-2xl font-bold">Featured articles</Text>
@@ -26,54 +67,44 @@ export default function Articles() {
               onChangeText={onChangeQuery}
               placeholder="Search Articles"
               placeholderTextColor="#94a3b8"
+              editable={articles!.length > 0}
               className="text-slate-400 w-full box-content border-2 border-slate-100 focus:border-sky-200 rounded-md pl-10 py-2 "
             />
             <View className="absolute left-2">
-              {/* #94a3b8 is slate-400 */}
               <AntDesign color="#94a3b8" name="search1" size={20} />
             </View>
           </View>
         </View>
         <View className="flex w-full ">
-          {articles.map((article, index) => (
-            <TouchableOpacity
-              key={article.key}
-              onPress={() => router.push(`/article`)}
-              className={`border-b-2 border-slate-100 ${
-                index === articles.length - 1 ? "border-b-0" : ""
-              }`}
-              activeOpacity={1}
-            >
-              <View className="p-5 flex-row items-center justify-between">
-                <View className="flex gap-y-2 w-44">
-                  <View className="flex flex-row gap-x-2">
-                    <Text className="text-xs">
-                      {article.authors
-                        .map((author) => `${author.name} ${author.surname[0]}.`)
-                        .join(", ")}
-                    </Text>
-                  </View>
-                  <Text className="text-lg font-bold">{article.title}</Text>
-                  <View className="flex flex-row gap-x-2">
-                    {article.tracks.map((track) => (
-                      <View className="bg-sky-100 rounded-md p-1" key={track}>
-                        <Text className="text-xs font-semibold">{track}</Text>
-                      </View>
-                    ))}
-                  </View>
+          {articles && articles.length > 0 ? (
+            articles.map((article, index) => (
+              <TouchableOpacity
+                key={article.id}
+                onPress={() => router.push(`/article`)}
+                className={`border-b-2 border-slate-100 ${
+                  index === articles.length - 1 ? "border-b-0" : ""
+                }`}
+                activeOpacity={1}
+              >
+                <View className="flex w-full px-5 py-2">
+                  <View className="flex flex-row gap-x-2"></View>
+                  <Text className="text-lg font-bold mb-2">
+                    {article.title}
+                  </Text>
+
                   <Text className="text-xs text-slate-500">
-                    {article.date} • 7 min read
+                    {formatDate(article.startDate, article.endDate)}
                   </Text>
                 </View>
-                <Image
-                  className="w-32 h-20 rounded-md"
-                  source={{
-                    uri: article.coverImgUrl,
-                  }}
-                />
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            ))
+          ) : (
+            <View className="p-5">
+              <Text className="text-lg text-center text-slate-500">
+                No articles available
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </ScrollView>
