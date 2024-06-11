@@ -47,7 +47,7 @@ Then scan QR code with Expo app. Make sure that your devices are on the same net
 4. [ ] State of the app for guest users
 5. [ ] State of the app for admin users
 
-## Backoffice
+### Backoffice
 
 Maybe it's worth adding edit/remove buttons to the pages and not list items tho
 ![](./admin-stuff.png)
