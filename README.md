@@ -16,21 +16,20 @@ EXPO_PUBLIC_API_BASE=192.168.2.233
 #### Profile
 
 1. [ ] See user info on profile page
-2. [ ] Edit profile details (do we even need it?)
+2. [ ] Log out
 3. [ ] Switch theme
 
 #### Auth
 
 1. [ ] Sign in
 2. [ ] Sign up
-3. [ ] Log out (toggle with button)
-4. [ ] Auto-logout (jwt expiration)
-5. [ ] State of the app for guest users
-6. [ ] State of the app for admin users
+3. [ ] Auto-logout (jwt expiration)
+4. [ ] State of the app for guest users
+5. [ ] State of the app for admin users
 
 #### Backoffice
 
-idk what's here
+![sfdsdf](./admin-stuff.png)
 
 ### Secondary stuff
 
