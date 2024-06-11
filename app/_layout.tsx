@@ -25,6 +25,13 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
+        name="track"
+        options={{
+          headerShown: true,
+          title: "Track",
+        }}
+      />
+      <Stack.Screen
         name="conference"
         options={{
           headerShown: true,

@@ -36,6 +36,25 @@ export interface Article {
   };
 }
 
+export interface Track {
+  id: number;
+  name: string;
+  description: string;
+  conferenceId: number;
+  articles: [
+    {
+      id: number;
+      title: string;
+      authors: string;
+      abstract: string;
+      startDate: string;
+      endDate: string;
+      conferenceId: number;
+      trackId: number;
+    }
+  ];
+}
+
 export interface Coordinates {
   latitude: number;
   longitude: number;

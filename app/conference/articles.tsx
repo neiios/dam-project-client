@@ -118,7 +118,7 @@ export default function Articles() {
             </View>
           </View>
         </View>
-        <View className="flex w-full">
+        <View className="flex w-full gap-y-4 p-5">
           {articles && articles.length > 0
             ? articles.map((article, index) => (
                 <Link
@@ -127,9 +127,9 @@ export default function Articles() {
                     pathname: "article",
                     params: { articleId: article.id, confId: confId },
                   }}
-                  className="border-b-2 border-slate-100"
+                  className="bg-sky-50 rounded-md"
                 >
-                  <View className="flex w-full px-5 py-2">
+                  <View className="flex w-full p-2">
                     <View className="flex flex-row gap-x-a2"></View>
                     <Text className="text-lg font-bold mb-2">
                       {article.title}
