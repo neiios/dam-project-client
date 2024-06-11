@@ -69,7 +69,7 @@ export default function ArticleDetails() {
               <Text className="text-lg font-bold mb-2">Room</Text>
               <View className="flex flex-row gap-x-2">
                 <AntDesign name="find" size={20} />
-                <Text className="font-semibold">{"H.1301 (Cornil)"}</Text>
+                <Text className="font-semibold">{article?.track.room}</Text>
               </View>
             </View>
 
@@ -77,7 +77,7 @@ export default function ArticleDetails() {
               <Text className="text-lg font-bold mb-2">Track</Text>
               <View className="flex flex-row gap-x-2">
                 <AntDesign name="paperclip" size={20} />
-                <Text className="font-semibold">{article?.track?.name}</Text>
+                <Text className="font-semibold">{article?.track.name}</Text>
               </View>
             </View>
           </View>

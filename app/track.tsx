@@ -58,9 +58,15 @@ export default function TrackDetails() {
             <Title>Track agenda</Title>
           </Header>
 
-          <View className=" border-b-2 border-slate-50 p-5">
-            <Text className="text-xl font-bold ">Description</Text>
-            <Text className="text-lg">{track?.description}</Text>
+          <View className=" border-b-2 border-slate-50 p-5 flex gap-y-5">
+            <View>
+              <Text className="text-xl font-bold ">Description</Text>
+              <Text className="text-lg">{track?.description}</Text>
+            </View>
+            <View>
+              <Text className="text-xl font-bold ">Room</Text>
+              <Text className="text-lg">{track?.room}</Text>
+            </View>
           </View>
           <View className="flex w-full p-5 ">
             <View className="flex w-full gap-y-5">

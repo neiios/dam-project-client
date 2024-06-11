@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Link } from "expo-router";
 import { Text, View, ScrollView, RefreshControl } from "react-native";
-import { Conference } from "@/types";
+import { Conference, Track } from "@/types";
 import { useFetchData } from "@/core/hooks";
 import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
@@ -17,7 +17,7 @@ export default function Tracks() {
     loading,
     error,
     refresh,
-  } = useFetchData<Conference[]>(
+  } = useFetchData<Track[]>(
     `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/1/tracks`
   );
 
@@ -64,6 +64,13 @@ export default function Tracks() {
                     <View className="flex">
                       <Text className="text-lg font-bold capitalize">
                         {track.name}
+                      </Text>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        className="text-xs text-slate-500 w-full"
+                      >
+                        {track?.room}
                       </Text>
                       <View className="flex flex-wrap w-72">
                         <Text

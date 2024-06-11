@@ -32,6 +32,7 @@ export interface Article {
   trackId: number;
   track: {
     id: number;
+    room: string;
     name: string;
     description: string;
     conferenceId: number;
@@ -42,6 +43,7 @@ export interface Track {
   id: number;
   name: string;
   description: string;
+  room: string;
   conferenceId: number;
   articles: [
     {
