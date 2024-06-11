@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { useFetchData } from "@/core/hooks";
 import { Article, Track } from "@/types";
 import { formatDate } from "@/core/utils";
 import { useRoute } from "@react-navigation/native";
+import Loader from "@/components/loader";
 
 function formatDate1(date) {
   const options = { year: "numeric", month: "long", day: "numeric" };
@@ -27,11 +28,7 @@ export default function TrackDetails() {
   );
 
   if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loader />;
   }
 
   if (error) {

@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useFetchData } from "@/core/hooks";
 import { Article } from "@/types";
 import { formatDate } from "@/core/utils";
+import Loader from "@/components/loader";
 
 export default function ArticleDetails() {
   const route = useRoute();
@@ -22,11 +23,7 @@ export default function ArticleDetails() {
   );
 
   if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loader />;
   }
 
   if (error) {

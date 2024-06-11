@@ -1,16 +1,10 @@
 import React, { useCallback } from "react";
 import { Link } from "expo-router";
-import {
-  Text,
-  View,
-  ScrollView,
-  Image,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
+import { Text, View, ScrollView, Image, RefreshControl } from "react-native";
 import { Conference } from "@/types";
 import { truncateTrackList, formatDate } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
+import Loader from "@/components/loader";
 
 export default function FeedScreen() {
   const {
@@ -27,11 +21,7 @@ export default function FeedScreen() {
   }, [refresh]);
 
   if (loading) {
-    return (
-      <View className="bg-white flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#075985" />
-      </View>
-    );
+    return <Loader />;
   }
 
   if (error) {

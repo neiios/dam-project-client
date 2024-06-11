@@ -2,7 +2,6 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   TextInput,
   RefreshControl,
   ActivityIndicator,
@@ -13,7 +12,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { Article } from "@/types";
 import { useRoute } from "@react-navigation/native";
 import { formatDate } from "@/core/utils";
-import { conference } from "@/assets/data";
 
 export default function Articles() {
   const route = useRoute();

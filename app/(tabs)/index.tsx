@@ -1,19 +1,12 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ScrollView, Image, RefreshControl } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { Conference } from "@/types";
-import { Link } from "expo-router";
 import { calculateDuration, formatDateRange } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
 import Map from "../../components/map";
+import Loader from "@/components/loader";
 
 export default function ConferenceDetails() {
   const route = useRoute();
@@ -29,11 +22,7 @@ export default function ConferenceDetails() {
   );
 
   if (loading) {
-    return (
-      <View className="bg-white flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#075985" />
-      </View>
-    );
+    return <Loader />;
   }
 
   if (error) {

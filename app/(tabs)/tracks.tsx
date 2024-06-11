@@ -1,15 +1,10 @@
 import React, { useCallback } from "react";
 import { Link } from "expo-router";
-import {
-  Text,
-  View,
-  ScrollView,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
+import { Text, View, ScrollView, RefreshControl } from "react-native";
 import { Conference } from "@/types";
 import { useFetchData } from "@/core/hooks";
 import { useRoute } from "@react-navigation/native";
+import Loader from "@/components/loader";
 
 export default function Tracks() {
   const route = useRoute();
@@ -29,11 +24,7 @@ export default function Tracks() {
   }, [refresh]);
 
   if (loading) {
-    return (
-      <View className="bg-white flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#075985" />
-      </View>
-    );
+    return <Loader />;
   }
 
   if (error) {
