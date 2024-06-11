@@ -3,14 +3,11 @@ import React from "react";
 import { Link } from "expo-router";
 import { useFetchData } from "@/core/hooks";
 import { Article, Track } from "@/types";
-import { formatDate } from "@/core/utils";
+import { formatDate, formatTrackDate } from "@/core/utils";
 import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
 
-function formatDate1(date) {
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return date.toLocaleDateString(undefined, options);
-}
+// i can't take it anymore
 
 export default function TrackDetails() {
   const route = useRoute();
@@ -39,15 +36,17 @@ export default function TrackDetails() {
     );
   }
 
-  // Group articles by start date (formatted to "June 9, 2024")
-  const articlesByDate = track?.articles.reduce((acc, article) => {
-    const date = formatDate1(new Date(article.startDate));
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(article);
-    return acc;
-  }, {});
+  const articlesByDate = track?.articles.reduce<Record<string, any[]>>(
+    (acc, article) => {
+      const date = formatTrackDate(new Date(article.startDate));
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(article);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <ScrollView className="bg-white">

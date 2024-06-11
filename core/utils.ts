@@ -1,4 +1,4 @@
-import { Coordinates, Track } from "@/types";
+import { Track } from "@/types";
 
 export const truncateTrackList = (tracks: Track[]) => {
   tracks.sort((a, b) => a.name.localeCompare(b.name));
@@ -83,4 +83,13 @@ export const calculateDuration = (startDate: string, endDate: string) => {
   return `${hours} hour${hours !== 1 ? "s" : ""} ${minutes} minute${
     minutes !== 1 ? "s" : ""
   }`;
+};
+
+export const formatTrackDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return date.toLocaleDateString(undefined, options);
 };
