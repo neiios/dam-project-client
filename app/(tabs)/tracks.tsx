@@ -18,7 +18,7 @@ export default function Tracks() {
     error,
     refresh,
   } = useFetchData<Track[]>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/1/tracks`
+    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/1/tracks`
   );
 
   const onRefresh = useCallback(() => {

@@ -23,7 +23,7 @@ export default function TrackDetails() {
     loading,
     error,
   } = useFetchData<Track>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences/${confId}/tracks/${trackId}`
+    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${confId}/tracks/${trackId}`
   );
 
   if (loading) {

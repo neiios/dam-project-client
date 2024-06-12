@@ -13,7 +13,7 @@ export default function FeedScreen() {
     error,
     refresh,
   } = useFetchData<Conference[]>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}:8080/api/v1/conferences`
+    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences`
   );
 
   const onRefresh = useCallback(() => {

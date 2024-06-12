@@ -12,10 +12,10 @@ Install dependencies
 npm install
 ```
 
-Create .env file in root directory and add your IP address there
+Create .env file in root directory and add the IP address and port your dev API is running on
 
 ```
-EXPO_PUBLIC_API_BASE=192.168.2.233
+EXPO_PUBLIC_API_BASE=192.168.2.233:8080
 ```
 
 Start project
@@ -25,6 +25,7 @@ npm run start
 ```
 
 Then scan QR code with Expo app. Make sure that your devices are on the same network.
+Also make sure that the ports are open in your firewall.
 
 ## TO-DO
 
