@@ -31,7 +31,7 @@ Also make sure that the ports are open in your firewall.
 
 ### Conferences
 
-1. [ ] Contact/ Request info about article
+1. [ ] Contact/ Request info about conference
 2. [ ] Q&A for articles
 
 ### Profile
@@ -42,11 +42,13 @@ Also make sure that the ports are open in your firewall.
 
 ### Auth
 
-1. [ ] Sign in
-2. [ ] Sign up
-3. [ ] Auto-logout (JWT expiration)
-4. [ ] State of the app for guest users
-5. [ ] State of the app for admin users
+1. [x] Sign in
+2. [x] Sign up
+3. [ ] Add context for auth
+4. [ ] Make sign in/ sign up pages look normal
+5. [ ] Auto-logout (JWT expiration)
+6. [ ] State of the app for guest users
+7. [ ] State of the app for admin users
 
 ### Backoffice
 
