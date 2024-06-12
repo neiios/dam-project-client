@@ -48,8 +48,11 @@ export default function Register() {
         }
       );
 
-      if (response.status !== 200) {
-        ToastAndroid.show("Invalid email or password", ToastAndroid.SHORT);
+      if (response.status !== 200 && response.status !== 201) {
+        ToastAndroid.show(
+          "Registration request failed. Please try again!",
+          ToastAndroid.SHORT
+        );
         return;
       }
 
@@ -83,7 +86,7 @@ export default function Register() {
         />
 
         <View>
-          <Button title="Login" onPress={handleRegistration} />
+          <Button title="Submit" onPress={handleRegistration} />
         </View>
 
         <View>
