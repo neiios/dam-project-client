@@ -9,7 +9,7 @@ type ButtonProps = {
 export default function Button({ title, onPress }: ButtonProps) {
   return (
     <TouchableOpacity
-      className="bg-sky-700 py-2 px-4 rounded-xl border-4 border-white active:border-sky-200"
+      className="bg-sky-700 py-2 px-4 rounded-xl"
       onPress={onPress}
       activeOpacity={0.8}
     >

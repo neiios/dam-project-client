@@ -11,11 +11,7 @@ export default function RootLayout() {
           headerShown: true,
           title: "Conferences",
           headerRight: () => (
-            <Link
-              href={{
-                pathname: "profile",
-              }}
-            >
+            <Link href="/login">
               <AntDesign name="user" size={24} />
             </Link>
           ),
