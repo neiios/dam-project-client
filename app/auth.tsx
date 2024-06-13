@@ -1,13 +1,15 @@
 import Button from "@/components/button";
+import Logo from "@/components/logo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, ToastAndroid } from "react-native";
+import { router } from "expo-router";
 
-export default function Register() {
+export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [isRegister, setIsRegister] = useState(false);
 
   useEffect(() => {
     async function checkAuth() {
@@ -26,7 +28,8 @@ export default function Register() {
       );
 
       if (response.status === 200) {
-        router.replace("/profile");
+        router.replace("profile");
+        console.log("successss");
       } else {
         await AsyncStorage.removeItem("jwtToken");
       }
@@ -58,21 +61,52 @@ export default function Register() {
 
       const result: { token: string } = await response.json();
       await AsyncStorage.setItem("jwtToken", result.token);
-      router.replace("/profile");
+      router.replace("/");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function handleLogin() {
+    try {
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      if (response.status !== 200) {
+        ToastAndroid.show("Invalid email or password", ToastAndroid.SHORT);
+        return;
+      }
+
+      const result: { token: string } = await response.json();
+      await AsyncStorage.setItem("jwtToken", result.token);
+      router.replace("/");
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    <View className="bg-white flex-1 items-center justify-center gap-y-8">
-      <Text className="text-4xl font-bold">Register</Text>
-      <View className="flex flex-col gap-y-6">
-        <TextInput
-          className="text-slate-400 min-w-[200px] border-2 border-slate-100 focus:border-sky-200 rounded-lg px-4 py-2"
-          placeholder="Name"
-          onChangeText={setName}
-        />
+    <View className="bg-white h-full items-center pt-20 gap-y-4">
+      <Logo />
+      <Text className="text-lg">
+        {isRegister ? "Create your account" : "Login to your account"}
+      </Text>
+      <View className="flex flex-col gap-y-6 w-full px-5">
+        {isRegister && (
+          <TextInput
+            className="text-slate-400 min-w-[200px] border-2 border-slate-100 focus:border-sky-200 rounded-lg px-4 py-2"
+            placeholder="Name"
+            onChangeText={setName}
+          />
+        )}
         <TextInput
           className="text-slate-400 min-w-[200px] border-2 border-slate-100 focus:border-sky-200 rounded-lg px-4 py-2"
           placeholder="Email"
@@ -84,16 +118,22 @@ export default function Register() {
           onChangeText={setPassword}
           secureTextEntry={true}
         />
-
         <View>
-          <Button title="Submit" onPress={handleRegistration} />
+          <Button
+            title={isRegister ? "Create account" : "Login"}
+            onPress={isRegister ? handleRegistration : handleLogin}
+          />
         </View>
-
-        <View>
-          <Text>Already have an account?</Text>
-          <Link className="text-sky-500" href="/login">
-            Log in
-          </Link>
+        <View className="flex flex-row gap-x-1 justify-center">
+          <Text>
+            {isRegister ? "Already have an account?" : "Don't have an account?"}
+          </Text>
+          <Text
+            className="text-sky-500"
+            onPress={() => setIsRegister(!isRegister)}
+          >
+            {isRegister ? "Log in" : "Register"}
+          </Text>
         </View>
       </View>
     </View>

@@ -11,7 +11,7 @@ export default function RootLayout() {
           headerShown: true,
           title: "Conferences",
           headerRight: () => (
-            <Link href="/login">
+            <Link href="/profile">
               <AntDesign name="user" size={24} />
             </Link>
           ),
@@ -43,6 +43,13 @@ export default function RootLayout() {
         options={{
           headerShown: true,
           title: "Profile",
+        }}
+      />
+      <Stack.Screen
+        name="auth"
+        options={{
+          headerShown: true,
+          title: "Welcome",
         }}
       />
     </Stack>
