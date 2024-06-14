@@ -1,12 +1,22 @@
-import React, { useCallback, useState } from "react";
 import { useFocusEffect, useRouter, Link } from "expo-router";
-import { Text, View, ScrollView, Image, RefreshControl } from "react-native";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Conference } from "@/types";
+import { useCallback, useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  ScrollView,
+  Image,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
+
+import { Conference, User } from "@/types";
 import { truncateTrackList, formatDate } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
 import Loader from "@/components/loader";
 import Button from "@/components/button";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 export default function FeedScreen() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +41,24 @@ export default function FeedScreen() {
   } = useFetchData<Conference[]>(
     `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences`
   );
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const jwtToken = await AsyncStorage.getItem("jwtToken");
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      const data: User = await response.json();
+      setUser(data);
+    })();
+  });
 
   const onRefresh = useCallback(() => {
     refresh();
@@ -112,12 +140,25 @@ export default function FeedScreen() {
             )}
           </View>
         </View>
+        {!isLoggedIn && (
+          <View className="absolute bottom-10 justify-center flex items-center w-full px-10">
+            <Button
+              title="Join us today!"
+              onPress={() => router.push("/auth")}
+            />
+          </View>
+        )}
       </ScrollView>
-      {!isLoggedIn && (
-        <View className="absolute bottom-10 justify-center flex items-center w-full px-10">
-          <Button title="Join us today!" onPress={() => router.push("/auth")} />
-        </View>
-      )}
+
+      <View className="absolute bottom-8 right-8 flex items-center">
+        <TouchableOpacity
+          className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+          activeOpacity={0.8}
+          onPress={() => router.push("/admin/conferences")}
+        >
+          <Ionicons color="white" name="add" size={32} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
