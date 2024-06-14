@@ -4,6 +4,7 @@ import { router, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { View, Text, Switch } from "react-native";
 import { useTheme } from "./context/ThemeContext";
+import { checkAuth } from "@/core/utils";
 
 export default function Profile() {
   const { colorScheme, toggleColorScheme } = useTheme();
