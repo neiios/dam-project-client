@@ -5,27 +5,41 @@ import Header from "@/components/header";
 import Title from "@/components/title";
 import Input from "@/components/input";
 import Button from "@/components/button";
+import { useAuth } from "./context/AuthContext"; // Import useAuth
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 export default function Contact() {
   const [message, setMessage] = useState<string>("");
   const route = useRoute();
-  const { trackId } = route.params as { trackId: string };
+  const { id } = route.params as { id: string }; // Make sure the parameter name matches
+  const { isAuthenticated } = useAuth(); // Use authentication state
 
   const handleSubmit = async () => {
+    if (!isAuthenticated) {
+      Alert.alert("Error", "You need to be logged in to send a message");
+      return;
+    }
+    const token = await AsyncStorage.getItem("jwtToken");
     try {
-      const response = await fetch("https://your-api-endpoint.com/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          trackId,
-          message,
-        }),
-      });
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/conferences/1`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ question: message }),
+        }
+      );
+
+      // debugging purposes
+      // const res = await response.json();
 
       if (response.ok) {
         Alert.alert("Success", "Your message has been sent successfully");
+        router.navigate("/");
       } else {
         Alert.alert("Error", "Failed to send your message");
       }
@@ -51,7 +65,7 @@ export default function Contact() {
           </View>
           <Input
             lines={10}
-            length={40}
+            length={150}
             placeholder="Your questions, wishes, or criticisms"
             value={message}
             onChangeText={setMessage}

@@ -59,6 +59,14 @@ export interface Track {
   ];
 }
 
+export interface ArticleQuestion {
+  id: number;
+  question: string;
+  answer: string;
+  status: "pending" | "answered";
+  articleId: number;
+}
+
 export interface Coordinates {
   latitude: number;
   longitude: number;

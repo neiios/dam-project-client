@@ -61,12 +61,12 @@ export default function ConferenceTabLayout() {
         initialParams={{ confId }}
       />
       <Tabs.Screen
-        name="contact"
+        name="reports"
         options={{
           tabBarIcon: ({ color }) => (
             <AntDesign color={color} name="message1" size={24} />
           ),
-          title: "Contact",
+          title: "Reports",
         }}
         initialParams={{ confId }}
       />

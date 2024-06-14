@@ -76,6 +76,15 @@ function RootLayout() {
             headerTintColor: headerStyle.color,
           }}
         />
+        <Stack.Screen
+          name="contact"
+          options={{
+            headerShown: true,
+            title: "Contact",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
       </Stack>
     </View>
   );
