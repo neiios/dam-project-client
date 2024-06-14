@@ -1,4 +1,6 @@
 import { Track } from "@/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, usePathname } from "expo-router";
 
 export const truncateTrackList = (tracks: Track[]) => {
   tracks.sort((a, b) => a.name.localeCompare(b.name));
@@ -93,3 +95,26 @@ export const formatTrackDate = (date: Date) => {
   };
   return date.toLocaleDateString(undefined, options);
 };
+
+export async function checkAuth() {
+  const jwtToken = await AsyncStorage.getItem("jwtToken");
+  if (!jwtToken) {
+    return false;
+  }
+
+  const response = await fetch(
+    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/verify`,
+    {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    }
+  );
+
+  if (response.status !== 200) {
+    await AsyncStorage.removeItem("jwtToken");
+    return false;
+  }
+
+  return true;
+}

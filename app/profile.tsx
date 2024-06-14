@@ -1,7 +1,9 @@
 import Button from "@/components/button";
+import { checkAuth } from "@/core/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { View, Text } from "react-native";
+import { useEffect } from "react";
+import { View } from "react-native";
 
 export default function Profile() {
   async function handleLogout() {
@@ -9,6 +11,15 @@ export default function Profile() {
     router.dismissAll();
     router.replace("/");
   }
+
+  useEffect(() => {
+    (async () => {
+      const isAuthenticated = await checkAuth();
+      if (!isAuthenticated) {
+        router.replace("/auth");
+      }
+    })();
+  }, []);
 
   return (
     <View className="bg-white flex-1 items-center justify-center">

@@ -3,7 +3,7 @@ import Logo from "@/components/logo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, ToastAndroid } from "react-native";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -12,30 +12,12 @@ export default function Auth() {
   const [isRegister, setIsRegister] = useState(false);
 
   useEffect(() => {
-    async function checkAuth() {
-      const jwtToken = await AsyncStorage.getItem("jwtToken");
-      if (!jwtToken) {
-        return;
+    (async () => {
+      const isAuthenticated = await AsyncStorage.getItem("jwtToken");
+      if (isAuthenticated) {
+        router.replace("/");
       }
-
-      const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/verify`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        router.replace("profile");
-        console.log("successss");
-      } else {
-        await AsyncStorage.removeItem("jwtToken");
-      }
-    }
-
-    checkAuth();
+    })();
   }, []);
 
   async function handleRegistration() {
