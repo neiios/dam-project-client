@@ -1,15 +1,17 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, ToastAndroid } from "react-native";
+import { router } from "expo-router";
+import { useAuth } from "./context/AuthContext";
 import Button from "@/components/button";
 import Logo from "@/components/logo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-import { View, Text, TextInput, ToastAndroid } from "react-native";
-import { router, usePathname } from "expo-router";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isRegister, setIsRegister] = useState(false);
+  const { login } = useAuth();
 
   useEffect(() => {
     (async () => {
@@ -42,7 +44,7 @@ export default function Auth() {
       }
 
       const result: { token: string } = await response.json();
-      await AsyncStorage.setItem("jwtToken", result.token);
+      await login(result.token);
       router.navigate("/");
     } catch (error) {
       console.error(error);
@@ -68,7 +70,7 @@ export default function Auth() {
       }
 
       const result: { token: string } = await response.json();
-      await AsyncStorage.setItem("jwtToken", result.token);
+      await login(result.token);
       router.navigate("/");
     } catch (error) {
       console.error(error);

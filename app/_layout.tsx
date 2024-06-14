@@ -1,12 +1,14 @@
-import { AntDesign } from "@expo/vector-icons";
-import { Link, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
-import { useTheme, ThemeProvider } from "./context/ThemeContext";
+import { Link, Stack } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import { AuthProvider, useAuth } from "./context/AuthContext"; // Import useAuth
 import Theme from "../core/theme";
 
 function RootLayout() {
   const { colorScheme } = useTheme();
+  const { isAuthenticated } = useAuth(); // Use authentication state
 
   const headerStyle = {
     backgroundColor:
@@ -30,11 +32,12 @@ function RootLayout() {
             title: "Conferences",
             headerStyle: { backgroundColor: headerStyle.backgroundColor },
             headerTintColor: headerStyle.color,
-            headerRight: () => (
-              <Link href="/profile">
-                <AntDesign name="user" size={24} color={headerStyle.color} />
-              </Link>
-            ),
+            headerRight: () =>
+              isAuthenticated && ( // Conditionally render the profile icon
+                <Link href="/profile">
+                  <AntDesign name="user" size={24} color={headerStyle.color} />
+                </Link>
+              ),
           }}
         />
         <Stack.Screen
@@ -80,8 +83,10 @@ function RootLayout() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <RootLayout />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RootLayout />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
