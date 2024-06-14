@@ -1,7 +1,9 @@
 import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
-import { View, Text } from "react-native";
+import { router, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { View, Text, Switch } from "react-native";
+import { useTheme } from "./context/ThemeContext";
 
 export default function Profile() {
   const { colorScheme, toggleColorScheme } = useTheme();
