@@ -84,7 +84,7 @@ export default function Articles() {
 
   return (
     <ScrollView
-      className="bg-white"
+      className="bg-white dark:bg-neutral-900"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }

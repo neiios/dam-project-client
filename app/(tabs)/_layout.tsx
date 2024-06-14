@@ -2,17 +2,32 @@ import { Tabs } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { useRoute } from "@react-navigation/native";
+import { useTheme } from "../context/ThemeContext";
+import Theme from "../../core/theme";
 
 export default function ConferenceTabLayout() {
   const route = useRoute();
   const { confId } = route.params as { confId: string };
+  const { colorScheme } = useTheme();
+
+  const tabBarStyle = {
+    backgroundColor:
+      colorScheme === "light" ? Theme["light-bg"] : Theme["dark-bg"],
+    borderTopColor: colorScheme === "light" ? "#e0e0e0" : "#303030",
+  };
+
+  const tabBarActiveTintColor = colorScheme === "light" ? "#0369a1" : "#ffffff";
+  const tabBarInactiveTintColor =
+    colorScheme === "light" ? "#8e8e8e" : "#b0b0b0";
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: "#0369a1",
+        tabBarActiveTintColor: tabBarActiveTintColor,
+        tabBarInactiveTintColor: tabBarInactiveTintColor,
+        tabBarStyle: tabBarStyle,
       }}
     >
       <Tabs.Screen

@@ -43,7 +43,7 @@ export default function Auth() {
 
       const result: { token: string } = await response.json();
       await AsyncStorage.setItem("jwtToken", result.token);
-      router.replace("/");
+      router.navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +69,7 @@ export default function Auth() {
 
       const result: { token: string } = await response.json();
       await AsyncStorage.setItem("jwtToken", result.token);
-      router.replace("/");
+      router.navigate("/");
     } catch (error) {
       console.error(error);
     }

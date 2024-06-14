@@ -35,7 +35,7 @@ export default function Contact() {
   };
 
   return (
-    <ScrollView className="bg-white">
+    <ScrollView className="bg-white dark:bg-neutral-900">
       <View>
         <Header>
           <Title>Contact us</Title>
@@ -43,7 +43,7 @@ export default function Contact() {
 
         <View className="p-5 gap-y-5 ">
           <View className="mb-5">
-            <Text className="text-base">
+            <Text className="text-base dark:text-gray-300">
               Hi! We're here to help you get the most out of this conference. If
               you have any questions or thoughts, please don't hesitate to reach
               out. Your curiosity is welcome!

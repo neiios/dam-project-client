@@ -1,57 +1,87 @@
 import { AntDesign } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import React from "react";
+import { View } from "react-native";
+import { useTheme, ThemeProvider } from "./context/ThemeContext";
+import Theme from "../core/theme";
 
-export default function RootLayout() {
+function RootLayout() {
+  const { colorScheme } = useTheme();
+
+  const headerStyle = {
+    backgroundColor:
+      colorScheme === "light" ? Theme["light-bg"] : Theme["dark-bg"],
+    color: colorScheme === "light" ? Theme["light-text"] : Theme["dark-text"],
+  };
+
+  const containerStyle = {
+    flex: 1,
+    backgroundColor:
+      colorScheme === "light" ? Theme["light-bg"] : Theme["dark-bg"],
+  };
+
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: true,
-          title: "Conferences",
-          headerRight: () => (
-            <Link href="/profile">
-              <AntDesign name="user" size={24} />
-            </Link>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="article"
-        options={{
-          headerShown: true,
-          title: "Article",
-        }}
-      />
-      <Stack.Screen
-        name="track"
-        options={{
-          headerShown: true,
-          title: "Track",
-        }}
-      />
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: true,
-          title: "Conference",
-        }}
-      />
-      <Stack.Screen
-        name="profile"
-        options={{
-          headerShown: true,
-          title: "Profile",
-        }}
-      />
-      <Stack.Screen
-        name="auth"
-        options={{
-          headerShown: true,
-          title: "Welcome",
-        }}
-      />
-    </Stack>
+    <View style={containerStyle}>
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: true,
+            title: "Conferences",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+            headerRight: () => (
+              <Link href="/profile">
+                <AntDesign name="user" size={24} color={headerStyle.color} />
+              </Link>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="article"
+          options={{
+            headerShown: true,
+            title: "Article",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
+        <Stack.Screen
+          name="track"
+          options={{
+            headerShown: true,
+            title: "Track",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: true,
+            title: "Conference",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
+        <Stack.Screen
+          name="profile"
+          options={{
+            headerShown: true,
+            title: "Profile",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
+      </Stack>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <RootLayout />
+    </ThemeProvider>
   );
 }

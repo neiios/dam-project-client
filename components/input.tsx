@@ -20,7 +20,7 @@ export default function Input({
       maxLength={length}
       placeholder={placeholder}
       placeholderTextColor="#94a3b8"
-      className="text-slate-400 flex box-content border-2 border-slate-100 focus:border-sky-200 rounded-md p-2"
+      className="text-slate-400 flex box-content border-2 border-slate-100 dark:border-neutral-500 focus:border-sky-200 rounded-md p-2"
       {...props}
     />
   );

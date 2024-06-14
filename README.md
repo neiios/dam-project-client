@@ -37,8 +37,8 @@ Also make sure that the ports are open in your firewall.
 ### Profile
 
 1. [ ] See user info on profile page
-2. [ ] Log out
-3. [ ] Switch theme
+2. [ X ] Log out
+3. [ X ] Switch theme
 
 ### Auth
 

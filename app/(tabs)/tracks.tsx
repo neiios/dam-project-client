@@ -7,6 +7,7 @@ import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
 import Header from "@/components/header";
 import Title from "@/components/title";
+import Error from "@/components/error";
 
 export default function Tracks() {
   const route = useRoute();
@@ -30,16 +31,12 @@ export default function Tracks() {
   }
 
   if (error) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-lg text-red-500">Error: {error}</Text>
-      </View>
-    );
+    return <Error error={error} />;
   }
 
   return (
     <ScrollView
-      className="bg-white"
+      className="bg-white dark:bg-neutral-900"
       refreshControl={
         <RefreshControl refreshing={loading} onRefresh={onRefresh} />
       }
