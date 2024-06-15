@@ -31,36 +31,31 @@ Also make sure that the ports are open in your firewall.
 
 ### Conferences
 
-1. [ ] Contact/ Request info about conference
+1. [ ] Show response on question in a modal window
 2. [ ] Q&A for articles
 
 ### Profile
 
 1. [ ] See user info on profile page
-2. [ X ] Log out
-3. [ X ] Switch theme
 
 ### Auth
 
-1. [x] Sign in
-2. [x] Sign up
-3. [ ] Add context for auth
-4. [ ] Make sign in/ sign up pages look normal
-5. [ ] Auto-logout (JWT expiration)
-6. [ ] State of the app for guest users
-7. [ ] State of the app for admin users
+1. [ ] Auto-logout (JWT expiration)
+2. [ ] State of the app for guest users
+3. [ ] State of the app for admin users
 
 ### Backoffice
 
-Maybe it's worth adding edit/remove buttons to the pages and not list items tho
-![](./admin-stuff.png)
+1. [ ] Add datepicker
+2. [ ] Add map for location selection
 
 ### Secondary stuff
 
-1. [ ] Infinite scroll for conferences
-2. [ ] Animation on touch of nav items (filling background color)
-3. [ ] Find an adequate way of nesting routes, with something like [id].tsx
+1. [ ] Add dark theme everywhere
+2. [ ] Infinite scroll for conferences
+3. [ ] Animation on touch of nav items (filling background color)
+4. [ ] Find an adequate way of nesting routes, with something like [id].tsx
    - https://github.com/huanghanzhilian/c-shopping-rn/tree/main/app
    - https://docs.expo.dev/develop/dynamic-routes/
-4. [ ] Fallback img for conferences
-5. [ ] Add share button to header of a conference page (probably need context for state)
+5. [ ] Fallback img for conferences
+6. [ ] Add share button to header of a conference page (probably need context for state)
