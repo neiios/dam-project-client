@@ -43,11 +43,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       );
       if (!response.ok) {
+        await AsyncStorage.removeItem("jwtToken");
         setIsAuthenticated(false);
         return;
       }
 
       setIsAuthenticated(true);
+      await AsyncStorage.setItem("jwtToken", token);
     };
 
     checkAuth();
