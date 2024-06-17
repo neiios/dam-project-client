@@ -1,19 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TextInput, Alert } from "react-native";
 import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import { useAuth } from "@/app/context/AuthContext";
+import {
+  DateTimePickerAndroid,
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 
-export default function AddConferencePage() {
-  const [formData, setFormData] = useState({
+export default function Page() {
+  const { isAuthenticated, userRole } = useAuth();
+  useEffect(() => {
+    if (!isAuthenticated || userRole !== "admin") {
+      router.replace("/auth");
+    }
+  }, []);
+
+  const [conference, setConference] = useState({
     name: "",
     latitude: "",
     longitude: "",
-    startDate: "",
-    endDate: "",
+    startDate: new Date(),
+    endDate: new Date(),
     imageUrl: "",
     description: "",
   });
+
+  function showStartDatePicker(mode: any) {
+    function updateStartDate(
+      event: DateTimePickerEvent,
+      selectedDate: Date | undefined
+    ) {
+      if (!selectedDate) {
+        return;
+      }
+      setConference({ ...conference, startDate: selectedDate });
+    }
+
+    DateTimePickerAndroid.open({
+      value: conference.startDate,
+      onChange: updateStartDate,
+      mode: mode,
+      is24Hour: true,
+    });
+  }
+
+  function showEndDatePicker(mode: any) {
+    function updateEndDate(
+      event: DateTimePickerEvent,
+      selectedDate: Date | undefined
+    ) {
+      if (!selectedDate) {
+        return;
+      }
+      setConference({ ...conference, endDate: selectedDate });
+    }
+
+    DateTimePickerAndroid.open({
+      value: conference.endDate,
+      onChange: updateEndDate,
+      mode: mode,
+      is24Hour: true,
+    });
+  }
 
   const handleSubmit = async () => {
     try {
@@ -26,7 +76,7 @@ export default function AddConferencePage() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jwtToken}`,
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(conference),
         }
       );
 
@@ -49,54 +99,94 @@ export default function AddConferencePage() {
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-lg mb-3"
           placeholder="Conference Name"
-          value={formData.name}
-          onChangeText={(text) => setFormData({ ...formData, name: text })}
+          value={conference.name}
+          onChangeText={(text) => setConference({ ...conference, name: text })}
         />
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-lg mb-3"
           placeholder="Latitude"
-          value={formData.latitude}
-          onChangeText={(text) => setFormData({ ...formData, latitude: text })}
+          value={conference.latitude}
+          onChangeText={(text) =>
+            setConference({ ...conference, latitude: text })
+          }
           keyboardType="numeric"
         />
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-lg mb-3"
           placeholder="Longitude"
-          value={formData.longitude}
-          onChangeText={(text) => setFormData({ ...formData, longitude: text })}
+          value={conference.longitude}
+          onChangeText={(text) =>
+            setConference({ ...conference, longitude: text })
+          }
           keyboardType="numeric"
-        />
-
-        {/* Replace with an actual date picker */}
-        <TextInput
-          className="w-full border border-gray-300 p-2 rounded-lg mb-3"
-          placeholder="Start Date (YYYY-MM-DD)"
-          value={formData.startDate}
-          onChangeText={(text) => setFormData({ ...formData, startDate: text })}
-        />
-        <TextInput
-          className="w-full border border-gray-300 p-2 rounded-lg mb-3"
-          placeholder="End Date (YYYY-MM-DD)"
-          value={formData.endDate}
-          onChangeText={(text) => setFormData({ ...formData, endDate: text })}
         />
 
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-lg mb-3"
           placeholder="Image URL"
-          value={formData.imageUrl}
-          onChangeText={(text) => setFormData({ ...formData, imageUrl: text })}
+          value={conference.imageUrl}
+          onChangeText={(text) =>
+            setConference({ ...conference, imageUrl: text })
+          }
         />
 
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-md mb-3 h-24"
           placeholder="Description"
-          value={formData.description}
+          value={conference.description}
           onChangeText={(text) =>
-            setFormData({ ...formData, description: text })
+            setConference({ ...conference, description: text })
           }
           multiline
         />
+
+        <View className="flex-row justify-between mb-4">
+          <View>
+            <Button
+              title="Pick Start Date"
+              onPress={() => showStartDatePicker("date")}
+            />
+            <Text className="text-center">
+              {conference.startDate.toLocaleDateString()}
+            </Text>
+          </View>
+
+          <View>
+            <Button
+              title="Pick Start Time"
+              onPress={() => {
+                showStartDatePicker("time");
+              }}
+            />
+            <Text className="text-center">
+              {conference.startDate.toLocaleTimeString()}
+            </Text>
+          </View>
+        </View>
+
+        <View className="flex-row justify-between mb-4">
+          <View>
+            <Button
+              title="Pick End Date"
+              onPress={() => showEndDatePicker("date")}
+            />
+            <Text className="text-center mt-2">
+              {conference.endDate.toLocaleDateString()}
+            </Text>
+          </View>
+
+          <View>
+            <Button
+              onPress={() => {
+                showEndDatePicker("time");
+              }}
+              title="Pick End Time"
+            />
+            <Text className="text-center">
+              {conference.endDate.toLocaleTimeString()}
+            </Text>
+          </View>
+        </View>
 
         <Button title="Submit" onPress={handleSubmit} />
       </View>

@@ -20,7 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "./context/AuthContext";
 
 export default function FeedScreen() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userRole } = useAuth();
   const router = useRouter();
 
   const {
@@ -51,86 +51,85 @@ export default function FeedScreen() {
   }
 
   return (
-    <View className="relative h-full bg-white dark:bg-neutral-900">
+    <View className="h-full bg-white dark:bg-neutral-900">
       <ScrollView
-        className="relative"
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         }
       >
-        <View>
-          <View className="flex w-full">
-            {conferences && conferences.length > 0 ? (
-              conferences.map((conference) => (
-                <Link
-                  key={conference.id}
-                  href={{
-                    pathname: "/(tabs)",
-                    params: { confId: conference.id },
-                  }}
-                  className="border-b-2 border-slate-50 dark:border-neutral-800"
-                >
-                  <View className="p-5 flex-row items-center justify-between">
-                    <View className="flex gap-y-2 w-52">
-                      <Text className="text-lg font-bold capitalize text-black dark:text-neutral-300">
-                        {conference.name}
-                      </Text>
-                      <View className="flex flex-row gap-x-2">
-                        {truncateTrackList(conference.tracks!).map((track) => (
-                          <View
-                            className="bg-sky-100 dark:bg-sky-900 rounded-md py-1 px-2"
-                            key={track}
-                          >
-                            <Text className="text-xs font-semibold text-black dark:text-white">
-                              {track}
-                            </Text>
-                          </View>
-                        ))}
-                      </View>
-                      <Text className="text-xs text-slate-500 dark:text-neutral-300">
-                        {formatDate(conference.startDate)}
-                      </Text>
-                      <Text className="text-xs text-slate-500 dark:text-neutral-300">
-                        {conference.city}
-                      </Text>
-                    </View>
-                    <Image
-                      className="w-32 h-20 rounded-md"
-                      source={{
-                        uri: conference.imageUrl,
-                      }}
-                    />
-                  </View>
-                </Link>
-              ))
-            ) : (
-              <View className="p-5">
-                <Text className="text-lg text-center text-slate-500 dark:text-slate-400">
-                  No conferences available
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
         {!isAuthenticated && (
-          <View className="absolute bottom-10 justify-center flex items-center w-full px-10">
+          <View className="w-full px-10 my-4">
             <Button
               title="Join us today!"
               onPress={() => router.push("/auth")}
             />
           </View>
         )}
+
+        <View className="flex w-full">
+          {conferences && conferences.length > 0 ? (
+            // TODO: AAAAAAA this really needs to be a separate component
+            conferences.map((conference) => (
+              <Link
+                key={conference.id}
+                href={{
+                  pathname: "/(tabs)",
+                  params: { confId: conference.id },
+                }}
+                className="border-b-2 border-slate-50 dark:border-neutral-800"
+              >
+                <View className="p-5 flex-row items-center justify-between">
+                  <View className="flex gap-y-2 w-52">
+                    <Text className="text-lg font-bold capitalize text-black dark:text-neutral-300">
+                      {conference.name}
+                    </Text>
+                    <View className="flex flex-row gap-x-2">
+                      {truncateTrackList(conference.tracks!).map((track) => (
+                        <View
+                          className="bg-sky-100 dark:bg-sky-900 rounded-md py-1 px-2"
+                          key={track}
+                        >
+                          <Text className="text-xs font-semibold text-black dark:text-white">
+                            {track}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                    <Text className="text-xs text-slate-500 dark:text-neutral-300">
+                      {formatDate(conference.startDate)}
+                    </Text>
+                    <Text className="text-xs text-slate-500 dark:text-neutral-300">
+                      {conference.city}
+                    </Text>
+                  </View>
+                  <Image
+                    className="w-32 h-20 rounded-md"
+                    source={{
+                      uri: conference.imageUrl,
+                    }}
+                  />
+                </View>
+              </Link>
+            ))
+          ) : (
+            <Text className="p-5 text-lg text-center text-slate-500 dark:text-slate-400">
+              No conferences available yet, check back later!
+            </Text>
+          )}
+        </View>
       </ScrollView>
 
-      <View className="absolute bottom-8 right-8 flex items-center">
-        <TouchableOpacity
-          className="bg-sky-700 py-4 px-4 rounded-xl w-full"
-          activeOpacity={0.8}
-          onPress={() => router.push("/admin/conferences")}
-        >
-          <Ionicons color="white" name="add" size={32} />
-        </TouchableOpacity>
-      </View>
+      {isAuthenticated && userRole === "admin" ? (
+        <View className="absolute bottom-8 right-8 flex items-center">
+          <TouchableOpacity
+            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            activeOpacity={0.8}
+            onPress={() => router.push("/admin/conferences")}
+          >
+            <Ionicons color="white" name="add" size={32} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 }

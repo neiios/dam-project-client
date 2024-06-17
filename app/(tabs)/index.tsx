@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  RefreshControl,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, Image, RefreshControl } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { Conference } from "@/types";
@@ -17,7 +10,7 @@ import Header from "@/components/header";
 import Title from "@/components/title";
 import { useTheme } from "../context/ThemeContext";
 import Error from "@/components/error";
-import { router } from "expo-router";
+import { useAuth } from "../context/AuthContext";
 
 export default function ConferenceDetails() {
   const route = useRoute();
@@ -151,17 +144,6 @@ export default function ConferenceDetails() {
           </View>
         </View>
       </ScrollView>
-      <View className="absolute bottom-8 right-8 flex items-center">
-        <TouchableOpacity
-          className="bg-sky-700 py-4 px-4 rounded-xl w-full"
-          activeOpacity={0.8}
-          onPress={() =>
-            router.push(`/admin/conferences/${conference?.id}/tracks`)
-          }
-        >
-          <Ionicons color="white" name="add" size={32} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }

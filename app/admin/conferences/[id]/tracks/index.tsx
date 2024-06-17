@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TextInput, Alert } from "react-native";
 import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
+import { useAuth } from "@/app/context/AuthContext";
 
-export default function AddConferencePage() {
+export default function Page() {
+  const { isAuthenticated, userRole } = useAuth();
+  useEffect(() => {
+    if (!isAuthenticated || userRole !== "admin") {
+      router.replace("/auth");
+    }
+  }, []);
+
+  const params = useLocalSearchParams();
+  const conferenceId = params.id;
+
   const [formData, setFormData] = useState({
     name: "",
     room: "",
     description: "",
   });
-
-  const params = useLocalSearchParams();
-  const conferenceId = params.id;
 
   const handleSubmit = async () => {
     try {
@@ -30,10 +38,12 @@ export default function AddConferencePage() {
       );
 
       if (response.ok) {
-        Alert.alert("Success", "Conference created successfully!");
+        Alert.alert("Success", "Track created successfully!");
+        // TODO: redirect to a proper page
+        // If only the other monkey was actually use file based routing life would be dream
         router.replace("/");
       } else {
-        Alert.alert("Error", "Conference creation failed.");
+        Alert.alert("Error", "Track creation failed.");
         console.log(await response.json());
       }
     } catch (error) {
