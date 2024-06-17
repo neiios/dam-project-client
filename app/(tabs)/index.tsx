@@ -117,7 +117,7 @@ export default function ConferenceDetails() {
                   {conference?.tracks?.map((track) => (
                     <View
                       className="bg-sky-100 dark:bg-sky-900 rounded-md py-1 px-2"
-                      key={track.name}
+                      key={track.id}
                     >
                       <Text className="text-xs font-semibold text-black dark:text-gray-300">
                         {track.name}
