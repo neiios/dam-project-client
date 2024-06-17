@@ -1,10 +1,17 @@
 import Button from "@/components/button";
 import Header from "@/components/header";
 import Title from "@/components/title";
-import React, { useEffect, useState } from "react";
-import { Text, ScrollView, View, ActivityIndicator } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Text,
+  ScrollView,
+  View,
+  ActivityIndicator,
+  RefreshControl,
+} from "react-native";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loader from "@/components/loader";
 
 export interface ArticleQuestion {
   id: number;
@@ -17,47 +24,55 @@ export interface ArticleQuestion {
 export default function Reports() {
   const [questions, setQuestions] = useState<ArticleQuestion[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/conferences/1`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await AsyncStorage.getItem("jwtToken")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch questions");
+      }
+
+      const data: ArticleQuestion[] = await response.json();
+      setQuestions(data);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false); // Ensure refreshing state is reset
+    }
+  };
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch(
-          `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/conferences/1`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${await AsyncStorage.getItem("jwtToken")}`,
-            },
-          }
-        );
+    fetchQuestions();
+  }, []);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch questions");
-        }
-
-        const data: ArticleQuestion[] = await response.json();
-        setQuestions(data);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
     fetchQuestions();
   }, []);
 
   if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loader />;
   }
 
   return (
-    <ScrollView className="bg-white dark:bg-neutral-900">
+    <ScrollView
+      className="bg-white dark:bg-neutral-900"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View>
         <Header>
           <Title>Contact us</Title>
