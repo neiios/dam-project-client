@@ -4,22 +4,19 @@ import { router } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import Button from "@/components/button";
 import Logo from "@/components/logo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isRegister, setIsRegister] = useState(false);
-  const { login } = useAuth();
+
+  const { login, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    (async () => {
-      const isAuthenticated = await AsyncStorage.getItem("jwtToken");
-      if (isAuthenticated) {
-        router.replace("/");
-      }
-    })();
+    if (isAuthenticated) {
+      router.replace("/");
+    }
   }, []);
 
   async function handleRegistration() {

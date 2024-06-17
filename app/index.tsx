@@ -16,22 +16,12 @@ import { truncateTrackList, formatDate } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
 import Loader from "@/components/loader";
 import Button from "@/components/button";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "./context/AuthContext";
 
 export default function FeedScreen() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
-
-  useFocusEffect(
-    useCallback(() => {
-      const checkAuth = async () => {
-        const jwtToken = await AsyncStorage.getItem("jwtToken");
-        setIsLoggedIn(!!jwtToken);
-      };
-
-      checkAuth();
-    }, [])
-  );
 
   const {
     data: conferences,
@@ -41,24 +31,6 @@ export default function FeedScreen() {
   } = useFetchData<Conference[]>(
     `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences`
   );
-
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const jwtToken = await AsyncStorage.getItem("jwtToken");
-      const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
-      );
-      const data: User = await response.json();
-      setUser(data);
-    })();
-  });
 
   const onRefresh = useCallback(() => {
     refresh();
@@ -140,7 +112,7 @@ export default function FeedScreen() {
             )}
           </View>
         </View>
-        {!isLoggedIn && (
+        {!isAuthenticated && (
           <View className="absolute bottom-10 justify-center flex items-center w-full px-10">
             <Button
               title="Join us today!"
