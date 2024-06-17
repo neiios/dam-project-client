@@ -9,8 +9,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => Promise<void>;
-  logout: () => Promise<void>;
+  userRole: "admin" | "user" | null;
+  validateAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,48 +25,43 @@ export function useAuth(): AuthContextType {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState<"admin" | "user" | null>(null);
+
+  async function validateToken() {
+    const token = await AsyncStorage.getItem("jwtToken");
+    if (!token) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    const response = await fetch(
+      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      await AsyncStorage.removeItem("jwtToken");
+      setIsAuthenticated(false);
+      return;
+    }
+
+    const { role } = await response.json();
+    setIsAuthenticated(true);
+    setUserRole(role);
+    await AsyncStorage.setItem("jwtToken", token);
+  }
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = await AsyncStorage.getItem("jwtToken");
-      if (!token) {
-        setIsAuthenticated(false);
-        return;
-      }
-
-      const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/users/verify`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        await AsyncStorage.removeItem("jwtToken");
-        setIsAuthenticated(false);
-        return;
-      }
-
-      setIsAuthenticated(true);
-      await AsyncStorage.setItem("jwtToken", token);
-    };
-
-    checkAuth();
-  }, []);
-
-  async function login(token: string) {
-    await AsyncStorage.setItem("jwtToken", token);
-    setIsAuthenticated(true);
-  }
-
-  async function logout() {
-    await AsyncStorage.removeItem("jwtToken");
-    setIsAuthenticated(false);
-  }
+    validateToken();
+  }, [validateToken]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, userRole, validateAuth: validateToken }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import Button from "@/components/button";
 import Logo from "@/components/logo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ export default function Auth() {
   const [name, setName] = useState("");
   const [isRegister, setIsRegister] = useState(false);
 
-  const { login, isAuthenticated } = useAuth();
+  const { isAuthenticated, validateAuth } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,7 +33,7 @@ export default function Auth() {
         }
       );
 
-      if (response.status !== 200 && response.status !== 201) {
+      if (!response.ok) {
         ToastAndroid.show(
           "Registration request failed. Please try again!",
           ToastAndroid.SHORT
@@ -41,8 +42,10 @@ export default function Auth() {
       }
 
       const result: { token: string } = await response.json();
-      await login(result.token);
-      router.navigate("/");
+      await AsyncStorage.setItem("jwtToken", result.token);
+      await validateAuth();
+
+      router.replace("/");
     } catch (error) {
       console.error(error);
     }
@@ -61,14 +64,16 @@ export default function Auth() {
         }
       );
 
-      if (response.status !== 200) {
+      if (!response.ok) {
         ToastAndroid.show("Invalid email or password", ToastAndroid.SHORT);
         return;
       }
 
       const result: { token: string } = await response.json();
-      await login(result.token);
-      router.navigate("/");
+      await AsyncStorage.setItem("jwtToken", result.token);
+      await validateAuth();
+
+      router.replace("/");
     } catch (error) {
       console.error(error);
     }

@@ -1,29 +1,26 @@
 import React, { useEffect } from "react";
 import { View, Text, Switch } from "react-native";
 import { useTheme } from "./context/ThemeContext";
-import { checkAuth } from "@/core/utils";
 import Button from "@/components/button";
 import { useRouter } from "expo-router";
-import { useAuth } from "./context/AuthContext"; // Import useAuth
+import { useAuth } from "./context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Profile() {
   const { colorScheme, toggleColorScheme } = useTheme();
-  const { logout } = useAuth();
+  const { isAuthenticated, validateAuth } = useAuth();
   const router = useRouter();
 
   async function handleLogout() {
-    await logout();
+    await AsyncStorage.removeItem("jwtToken");
+    await validateAuth();
     router.replace("/");
   }
 
   useEffect(() => {
-    (async () => {
-      const isAuthenticated = await AsyncStorage.getItem("jwtToken");
-      if (!isAuthenticated) {
-        router.replace("/");
-      }
-    })();
+    if (!isAuthenticated) {
+      router.replace("/");
+    }
   }, []);
 
   return (
