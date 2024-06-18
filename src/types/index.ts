@@ -98,3 +98,11 @@ export interface User {
   name: string;
   role: "admin" | "user";
 }
+
+export interface Question {
+  id: number;
+  questions: string;
+  answer: string;
+  status: "pending" | "answered";
+  articleId: number;
+}

@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useFetchData } from "@/core/hooks";
@@ -9,7 +9,7 @@ import Loader from "@/components/loader";
 import Title from "@/components/title";
 import Header from "@/components/header";
 import { useAuth } from "@/app/context/AuthContext";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 
 interface SectionProps {
   title?: string;
@@ -37,6 +37,7 @@ export default function ArticleDetails() {
   };
 
   const { isAuthenticated, userRole } = useAuth();
+  const [questionCount, setQuestionCount] = useState<number>(0);
 
   const {
     data: article,
@@ -58,6 +59,26 @@ export default function ArticleDetails() {
     );
   }
 
+  const fetchQuestionCount = async () => {
+    try {
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions/count`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch questions");
+      }
+
+      const data: number = await response.json();
+      setQuestionCount(data);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
+
   const date = formatDate(article!.startDate, article!.endDate);
 
   return (
@@ -73,15 +94,28 @@ export default function ArticleDetails() {
               <Section title="Date and time" content={date} icon="calendar" />
               <Section
                 title="Speakers"
-                content={article?.authors} // Assuming authors is an array
+                content={article?.authors}
                 icon="user"
               />
               <Section title="Room" content={article?.track.room} icon="find" />
-              <Section
-                title="Track"
-                content={article?.track.name}
-                icon="paperclip"
-              />
+              <View className="mt-5">
+                <Text className="text-lg font-bold mb-2">
+                  Questions & Answers
+                </Text>
+                <View className="flex items-start">
+                  <Link
+                    href={{
+                      pathname: "questions",
+                      params: { articleId: articleId },
+                    }}
+                    className="font-semibold active:opacity-50 text-blue-700"
+                  >
+                    {questionCount
+                      ? `See all questions (${questionCount})`
+                      : "Be the first to ask a questions"}
+                  </Link>
+                </View>
+              </View>
             </View>
           </View>
         </View>
