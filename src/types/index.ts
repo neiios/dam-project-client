@@ -17,10 +17,13 @@ export interface Conference {
 export interface Request {
   id: number;
   question: string;
-  answer: string;
   status: "answered" | "pending";
   conferenceId: number;
   userId: number;
+}
+
+export interface ConferenceRequest extends Request {
+  answer: string;
 }
 
 export interface Question {
@@ -106,3 +109,5 @@ export interface Question {
   status: "pending" | "answered";
   articleId: number;
 }
+
+export interface ArticleAnswer {}

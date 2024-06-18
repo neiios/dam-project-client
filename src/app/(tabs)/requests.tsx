@@ -1,14 +1,17 @@
-import Button from "@/components/button";
-import Header from "@/components/header";
-import Title from "@/components/title";
+// pages/reports.tsx
+
 import React, { useCallback, useEffect, useState } from "react";
 import { Text, ScrollView, View, RefreshControl } from "react-native";
-import { Redirect, router, useFocusEffect } from "expo-router";
+import { Redirect, useRouter, useFocusEffect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Loader from "@/components/loader";
-import { AntDesign } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
 import { useRoute } from "@react-navigation/native";
+import Loader from "@/components/loader";
+import Header from "@/components/header";
+import Title from "@/components/title";
+import Button from "@/components/button";
+import QuestionBox from "@/components/QuestionBox";
+import { Request } from "@/types";
 
 export interface ArticleQuestion {
   id: number;
@@ -24,10 +27,11 @@ export default function Reports() {
     confId: string;
   };
 
-  const [questions, setQuestions] = useState<ArticleQuestion[]>([]);
+  const [questions, setQuestions] = useState<Request[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const { isAuthenticated, userRole } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -56,7 +60,7 @@ export default function Reports() {
         throw new Error("Failed to fetch questions");
       }
 
-      const data: ArticleQuestion[] = await response.json();
+      const data: Request[] = await response.json();
       setQuestions(data);
     } catch (error) {
       console.error("Error fetching questions:", error);
@@ -89,6 +93,7 @@ export default function Reports() {
 
   const answeredQuestions = questions.filter((q) => q.status === "answered");
   const pendingQuestions = questions.filter((q) => q.status === "pending");
+
   return (
     <ScrollView
       className="bg-white dark:bg-neutral-900"
@@ -119,56 +124,18 @@ export default function Reports() {
               />
             </View>
           </View>
-
-          {answeredQuestions.length > 0 && (
-            <>
-              <Text className="text-lg font-bold mb-5">Answered</Text>
-              <View className="flex w-full rounded-md border-2 border-neutral-100 bg-neutral-50 mb-5">
-                {answeredQuestions.map((question, index) => (
-                  <View
-                    key={question.id}
-                    className={`p-4 w-full border-slate-100 justify-between flex flex-row items-center ${
-                      index === answeredQuestions.length - 1 ? "" : "border-b-2"
-                    }`}
-                  >
-                    <Text className="text-sm dark:text-gray-200 font-semibold">
-                      {question.question}
-                    </Text>
-                    <AntDesign
-                      className="color-black dark:color-white text-4xl"
-                      name="right"
-                      size={15}
-                    />
-                  </View>
-                ))}
-              </View>
-            </>
-          )}
-
-          {pendingQuestions.length > 0 && (
-            <>
-              <Text className="text-lg font-bold mb-5">Pending</Text>
-              <View className="flex w-full rounded-md border-2 border-neutral-100 bg-neutral-50">
-                {pendingQuestions.map((question, index) => (
-                  <View
-                    key={question.id}
-                    className={`p-4 w-full border-slate-100 justify-between flex flex-row items-center ${
-                      index === pendingQuestions.length - 1 ? "" : "border-b-2"
-                    }`}
-                  >
-                    <Text className="text-sm dark:text-gray-200 font-semibold">
-                      {question.question}
-                    </Text>
-                    <AntDesign
-                      className="color-black dark:color-white text-4xl"
-                      name="right"
-                      size={15}
-                    />
-                  </View>
-                ))}
-              </View>
-            </>
-          )}
+          <View>
+            <QuestionBox
+              questions={answeredQuestions}
+              title="Answered"
+              confId={confId}
+            />
+            <QuestionBox
+              questions={pendingQuestions}
+              title="Pending"
+              confId={confId}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>

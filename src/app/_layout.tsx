@@ -112,6 +112,15 @@ function RootLayout() {
             headerTintColor: headerStyle.color,
           }}
         />
+        <Stack.Screen
+          name="conferenceRequest"
+          options={{
+            headerShown: true,
+            title: "Request",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
       </Stack>
     </View>
   );
