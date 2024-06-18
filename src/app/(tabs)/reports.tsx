@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from "@/components/loader";
 import { AntDesign } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
+import { useRoute } from "@react-navigation/native";
 
 export interface ArticleQuestion {
   id: number;
@@ -18,28 +19,35 @@ export interface ArticleQuestion {
 }
 
 export default function Reports() {
+  const route = useRoute();
+  const { confId } = route.params as {
+    confId: string;
+  };
+
   const [questions, setQuestions] = useState<ArticleQuestion[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const { isAuthenticated, userRole } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Redirect href="/auth" />;
-  }
-
-  if (loading) {
-    return <Loader />;
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+    fetchQuestions();
+  }, [isAuthenticated]);
 
   const fetchQuestions = async () => {
     try {
+      const token = await AsyncStorage.getItem("jwtToken");
+      if (!token) throw new Error("No token found");
+
       const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/conferences/1`,
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${confId}/requests`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${await AsyncStorage.getItem("jwtToken")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -60,8 +68,10 @@ export default function Reports() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchQuestions();
-    }, [])
+      if (isAuthenticated) {
+        fetchQuestions();
+      }
+    }, [isAuthenticated])
   );
 
   const onRefresh = useCallback(() => {
@@ -69,9 +79,16 @@ export default function Reports() {
     fetchQuestions();
   }, []);
 
+  if (!isAuthenticated) {
+    return <Redirect href="/auth" />;
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
+
   const answeredQuestions = questions.filter((q) => q.status === "answered");
   const pendingQuestions = questions.filter((q) => q.status === "pending");
-
   return (
     <ScrollView
       className="bg-white dark:bg-neutral-900"
@@ -93,7 +110,12 @@ export default function Reports() {
             <View>
               <Button
                 title="Ask a question"
-                onPress={() => router.push("../contact")}
+                onPress={() =>
+                  router.push({
+                    pathname: "../contact",
+                    params: { confId: confId },
+                  })
+                }
               />
             </View>
           </View>

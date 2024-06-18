@@ -1,26 +1,44 @@
 import React, { useState } from "react";
-import { View, ScrollView, Text, Alert } from "react-native";
-import Header from "@/components/header";
-import Title from "@/components/title";
-import Input from "@/components/input";
-import Button from "@/components/button";
-import { useAuth } from "@/app/context/AuthContext"; // Import useAuth
+import { ToastAndroid } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import { useAuth } from "@/app/context/AuthContext";
+import Form from "@/components/form";
+import { useRoute } from "@react-navigation/native";
 
-export default function Contact() {
+const MAX_MESSAGE_LENGTH = 250;
+
+const Contact = () => {
   const [message, setMessage] = useState<string>("");
   const { isAuthenticated } = useAuth();
+  const route = useRoute();
+  const { confId } = route.params as {
+    confId: string;
+  };
 
   const handleSubmit = async () => {
     if (!isAuthenticated) {
-      Alert.alert("Error", "You need to be logged in to send a message");
+      ToastAndroid.show(
+        "You need to be logged in to send a message",
+        ToastAndroid.SHORT
+      );
       return;
     }
+
+    if (message.trim() === "") {
+      ToastAndroid.show("Message cannot be empty", ToastAndroid.SHORT);
+      return;
+    }
+
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      ToastAndroid.show("Your message is too long", ToastAndroid.SHORT);
+      return;
+    }
+
     const token = await AsyncStorage.getItem("jwtToken");
     try {
       const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/conferences/1`,
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${confId}/requests`,
         {
           method: "POST",
           headers: {
@@ -32,47 +50,31 @@ export default function Contact() {
       );
 
       if (response.ok) {
-        Alert.alert("Success", "Your message has been sent successfully");
+        ToastAndroid.show(
+          "Your message has been sent successfully",
+          ToastAndroid.SHORT
+        );
         router.navigate("..");
       } else {
-        Alert.alert("Error", "Failed to send your message");
+        ToastAndroid.show("Failed to send your message", ToastAndroid.SHORT);
       }
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert("Error", error.message);
+        ToastAndroid.show(error.message, ToastAndroid.SHORT);
       } else {
-        Alert.alert("Error", "An unknown error occurred.");
+        ToastAndroid.show("An unknown error occurred.", ToastAndroid.SHORT);
       }
     }
   };
 
   return (
-    <ScrollView className="bg-white dark:bg-neutral-900">
-      <View>
-        <Header>
-          <Title>Contact us</Title>
-        </Header>
-
-        <View className="p-5 gap-y-5 ">
-          <View className="mb-5">
-            <Text className="text-base dark:text-gray-300">
-              Hi! We're here to help you get the most out of this conference. If
-              you have any questions or thoughts, please don't hesitate to reach
-              out. Your curiosity is welcome!
-            </Text>
-          </View>
-          <Input
-            lines={10}
-            length={150}
-            placeholder="Your questions, wishes, or criticisms"
-            value={message}
-            onChangeText={setMessage}
-            style={{ textAlignVertical: "top" }}
-            className="mb-5"
-          />
-          <Button title="Submit" onPress={handleSubmit} />
-        </View>
-      </View>
-    </ScrollView>
+    <Form
+      message={message}
+      setMessage={setMessage}
+      handleSubmit={handleSubmit}
+      MAX_MESSAGE_LENGTH={MAX_MESSAGE_LENGTH}
+    />
   );
-}
+};
+
+export default Contact;
