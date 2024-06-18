@@ -1,7 +1,4 @@
-import { useFocusEffect, useRouter, Link } from "expo-router";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useState } from "react";
+import { useRouter, Link } from "expo-router";
 import {
   Text,
   View,
@@ -10,8 +7,7 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from "react-native";
-
-import { Conference, User } from "@/types";
+import { Conference } from "@/types";
 import { truncateTrackList, formatDate } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
 import Loader from "@/components/loader";
@@ -32,10 +28,6 @@ export default function FeedScreen() {
     `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences`
   );
 
-  const onRefresh = useCallback(() => {
-    refresh();
-  }, [refresh]);
-
   if (loading) {
     return <Loader />;
   }
@@ -54,7 +46,7 @@ export default function FeedScreen() {
     <View className="h-full bg-white dark:bg-neutral-900">
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+          <RefreshControl refreshing={loading} onRefresh={refresh} />
         }
       >
         {!isAuthenticated && (
