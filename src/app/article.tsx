@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useFetchData } from "@/core/hooks";
@@ -10,6 +10,24 @@ import Title from "@/components/title";
 import Header from "@/components/header";
 import { useAuth } from "@/app/context/AuthContext";
 import { router } from "expo-router";
+
+interface SectionProps {
+  title?: string;
+  icon?: any;
+  content?: string;
+}
+
+const Section: FC<SectionProps> = ({ title, icon, content }) => {
+  return (
+    <View className="mt-5">
+      <Text className="text-lg font-bold mb-2">{title}</Text>
+      <View className="flex flex-row gap-x-2 items-center pr-5">
+        {icon && <AntDesign name={icon} size={20} />}
+        <Text className="font-semibold">{content}</Text>
+      </View>
+    </View>
+  );
+};
 
 export default function ArticleDetails() {
   const route = useRoute();
@@ -40,6 +58,8 @@ export default function ArticleDetails() {
     );
   }
 
+  const date = formatDate(article!.startDate, article!.endDate);
+
   return (
     <View className="min-h-full bg-white">
       <ScrollView>
@@ -49,42 +69,19 @@ export default function ArticleDetails() {
               <Title>{article?.title}</Title>
             </Header>
             <View className="p-5 flex gap-y-5">
-              <View>
-                <Text className="text-lg font-bold mb-2">Abstract</Text>
-                <Text className="text-lg">{article?.abstract}</Text>
-              </View>
-              <View>
-                <Text className="text-lg font-bold mb-2">Date and time</Text>
-                <View className="flex flex-row gap-x-2">
-                  <AntDesign name="calendar" size={20} />
-                  <Text className="font-semibold">
-                    {formatDate(article!.startDate, article!.endDate)}
-                  </Text>
-                </View>
-              </View>
-              <View>
-                <Text className="text-lg font-bold mb-2">Speakers</Text>
-                <View className="flex flex-row gap-x-2">
-                  <AntDesign name="user" size={20} />
-                  <Text className="font-semibold">{article?.authors}</Text>
-                </View>
-              </View>
-
-              <View>
-                <Text className="text-lg font-bold mb-2">Room</Text>
-                <View className="flex flex-row gap-x-2">
-                  <AntDesign name="find" size={20} />
-                  <Text className="font-semibold">{article?.track.room}</Text>
-                </View>
-              </View>
-
-              <View>
-                <Text className="text-lg font-bold mb-2">Track</Text>
-                <View className="flex flex-row gap-x-2">
-                  <AntDesign name="paperclip" size={20} />
-                  <Text className="font-semibold">{article?.track.name}</Text>
-                </View>
-              </View>
+              <Section title="Abstract" content={article?.abstract} />
+              <Section title="Date and time" content={date} icon="calendar" />
+              <Section
+                title="Speakers"
+                content={article?.authors} // Assuming authors is an array
+                icon="user"
+              />
+              <Section title="Room" content={article?.track.room} icon="find" />
+              <Section
+                title="Track"
+                content={article?.track.name}
+                icon="paperclip"
+              />
             </View>
           </View>
         </View>
