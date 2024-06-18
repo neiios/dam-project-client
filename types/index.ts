@@ -1,5 +1,12 @@
 import { ReactNode } from "react";
 
+export interface User {
+  id: number;
+  name: string;
+  password: string;
+  email: string;
+}
+
 export interface Track {
   id: number;
   name: string;

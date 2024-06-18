@@ -140,16 +140,12 @@ export default function FeedScreen() {
             )}
           </View>
         </View>
-        {!isLoggedIn && (
-          <View className="absolute bottom-10 justify-center flex items-center w-full px-10">
-            <Button
-              title="Join us today!"
-              onPress={() => router.push("/auth")}
-            />
-          </View>
-        )}
       </ScrollView>
-
+      {!isLoggedIn && (
+        <View className="absolute bottom-10 justify-center flex items-center w-full px-10">
+          <Button title="Join us today!" onPress={() => router.push("/auth")} />
+        </View>
+      )}
       <View className="absolute bottom-8 right-8 flex items-center">
         <TouchableOpacity
           className="bg-sky-700 py-4 px-4 rounded-xl w-full"
