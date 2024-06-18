@@ -112,7 +112,7 @@ export default function Reports() {
                 title="Request information"
                 onPress={() =>
                   router.push({
-                    pathname: "../contact",
+                    pathname: "requestForm",
                     params: { confId: confId },
                   })
                 }

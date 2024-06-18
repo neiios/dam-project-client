@@ -77,10 +77,10 @@ function RootLayout() {
           }}
         />
         <Stack.Screen
-          name="contact"
+          name="requestForm"
           options={{
             headerShown: true,
-            title: "Contact",
+            title: "Request information",
             headerStyle: { backgroundColor: headerStyle.backgroundColor },
             headerTintColor: headerStyle.color,
           }}

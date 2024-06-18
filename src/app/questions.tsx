@@ -63,8 +63,8 @@ export default function Questions() {
           <View className="p-5">
             <View className="border-b-2 border-slate-50 flex gap-y-5 mb-5">
               <Text className="text-base dark:text-gray-300 mb-5">
-                Have any questions about this conference? Don't hesitate and
-                reach out!
+                Have any questions about this article? Don't hesitate and reach
+                out!
               </Text>
               <View>
                 <Button

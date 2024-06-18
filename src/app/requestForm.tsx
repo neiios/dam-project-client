@@ -73,6 +73,10 @@ const Contact = () => {
       setMessage={setMessage}
       handleSubmit={handleSubmit}
       MAX_MESSAGE_LENGTH={MAX_MESSAGE_LENGTH}
+      statement="Hi! We're here to help you get the most out of this conference. If
+      you have any questions or thoughts, please don't hesitate to reach
+      out. Your curiosity is welcome!"
+      placeholder="Your questions, wishes, or criticisms"
     />
   );
 };

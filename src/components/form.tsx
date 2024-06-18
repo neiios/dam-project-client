@@ -10,6 +10,8 @@ interface FormProps {
   setMessage: (text: string) => void;
   handleSubmit: () => void;
   MAX_MESSAGE_LENGTH: number;
+  placeholder: string;
+  statement: string;
 }
 
 const Form: FC<FormProps> = ({
@@ -17,6 +19,8 @@ const Form: FC<FormProps> = ({
   setMessage,
   handleSubmit,
   MAX_MESSAGE_LENGTH,
+  statement,
+  placeholder,
 }) => {
   return (
     <ScrollView className="bg-white dark:bg-neutral-900">
@@ -26,16 +30,12 @@ const Form: FC<FormProps> = ({
         </Header>
         <View className="p-5">
           <View className="mb-4">
-            <Text className="text-base dark:text-gray-300">
-              Hi! We're here to help you get the most out of this conference. If
-              you have any questions or thoughts, please don't hesitate to reach
-              out. Your curiosity is welcome!
-            </Text>
+            <Text className="text-base dark:text-gray-300">{statement}</Text>
           </View>
           <Input
             lines={10}
             length={MAX_MESSAGE_LENGTH}
-            placeholder="Your questions, wishes, or criticisms"
+            placeholder={placeholder}
             value={message}
             onChangeText={setMessage}
             style={{ textAlignVertical: "top" }}
