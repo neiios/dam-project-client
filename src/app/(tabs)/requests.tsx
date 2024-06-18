@@ -106,9 +106,9 @@ export default function Reports() {
           <Title>Contact us</Title>
         </Header>
 
-        <View className="p-5">
-          <View className="border-b-2 border-slate-50 flex gap-y-5 mb-5">
-            <Text className="text-base dark:text-gray-300 mb-5">
+        <View>
+          <View className="border-b-2 p-5 border-slate-50 flex gap-y-5">
+            <Text className="text-base dark:text-gray-300">
               Have any questions about this conference? Don't hesitate and reach
               out!
             </Text>
@@ -124,7 +124,7 @@ export default function Reports() {
               />
             </View>
           </View>
-          <View>
+          <View className="p-5">
             <QuestionBox
               questions={answeredQuestions}
               title="Answered"
