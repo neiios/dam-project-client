@@ -8,7 +8,7 @@ import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
 import Header from "@/components/header";
 import Title from "@/components/title";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useAuth } from "./context/AuthContext";
 
 // i can't take it anymore
@@ -85,7 +85,10 @@ export default function TrackDetails() {
                           key={article.id}
                           href={{
                             pathname: "article",
-                            params: { articleId: article.id, confId: confId },
+                            params: {
+                              articleId: article.id,
+                              confId: confId,
+                            },
                           }}
                           className="bg-sky-50 rounded-md"
                         >
@@ -108,6 +111,20 @@ export default function TrackDetails() {
           </View>
         </View>
       </ScrollView>
+
+      {isAuthenticated && userRole === "admin" ? (
+        <View className="absolute bottom-28 right-8 flex items-center">
+          <TouchableOpacity
+            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            activeOpacity={0.8}
+            onPress={() =>
+              router.push(`/admin/conferences/${confId}/tracks/${trackId}`)
+            }
+          >
+            <MaterialIcons color="white" name="edit" size={32} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
 
       {isAuthenticated && userRole === "admin" ? (
         <View className="absolute bottom-8 right-8 flex items-center">

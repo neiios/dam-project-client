@@ -14,7 +14,8 @@ export default function Page() {
   }, []);
 
   const params = useLocalSearchParams();
-  const conferenceId = params.id;
+  const conferenceId = params.conferenceId;
+  const trackId = params.trackId;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -22,13 +23,48 @@ export default function Page() {
     description: "",
   });
 
+  useEffect(() => {
+    async function fetchTrackData() {
+      if (!trackId) return;
+
+      try {
+        const jwtToken = await AsyncStorage.getItem("jwtToken");
+        const response = await fetch(
+          `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${conferenceId}/tracks/${trackId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setFormData({
+            name: data.name,
+            room: data.room,
+            description: data.description,
+          });
+        } else {
+          Alert.alert("Error", "Failed to fetch track data.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An unexpected error occurred.");
+      }
+    }
+
+    fetchTrackData();
+  }, [trackId]);
+
   const handleSubmit = async () => {
     try {
       const jwtToken = await AsyncStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${conferenceId}/tracks`,
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${conferenceId}/tracks/${trackId}`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jwtToken}`,
@@ -38,12 +74,14 @@ export default function Page() {
       );
 
       if (response.ok) {
-        Alert.alert("Success", "Track created successfully!");
-        // TODO: redirect to a proper page
-        // If only the other monkey was actually use file based routing life would be dream
-        router.replace("/");
+        Alert.alert("Success", "Track updated successfully!");
+        // TODO: redirect to a proper page (specifc track details)
+        router.push({
+          pathname: "/(tabs)",
+          params: { confId: conferenceId },
+        });
       } else {
-        Alert.alert("Error", "Track creation failed.");
+        Alert.alert("Error", "Track update failed.");
         console.log(await response.json());
       }
     } catch (error) {
@@ -54,7 +92,7 @@ export default function Page() {
   return (
     <ScrollView className="bg-white h-full pt-20 gap-y-4 px-6">
       <View className="flex items-center">
-        <Text className="text-4xl font-bold mb-12">Add Track</Text>
+        <Text className="text-4xl font-bold mb-12">Edit Track</Text>
 
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-lg mb-3"
