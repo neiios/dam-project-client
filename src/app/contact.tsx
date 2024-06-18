@@ -31,12 +31,9 @@ export default function Contact() {
         }
       );
 
-      // debugging purposes
-      // const res = await response.json();
-
       if (response.ok) {
         Alert.alert("Success", "Your message has been sent successfully");
-        router.navigate("/");
+        router.navigate("..");
       } else {
         Alert.alert("Error", "Failed to send your message");
       }
