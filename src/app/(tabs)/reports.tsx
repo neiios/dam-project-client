@@ -3,9 +3,11 @@ import Header from "@/components/header";
 import Title from "@/components/title";
 import React, { useCallback, useEffect, useState } from "react";
 import { Text, ScrollView, View, RefreshControl } from "react-native";
-import { router, useFocusEffect } from "expo-router";
+import { Redirect, router, useFocusEffect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from "@/components/loader";
+import { AntDesign } from "@expo/vector-icons";
+import { useAuth } from "../context/AuthContext";
 
 export interface ArticleQuestion {
   id: number;
@@ -19,6 +21,15 @@ export default function Reports() {
   const [questions, setQuestions] = useState<ArticleQuestion[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const { isAuthenticated, userRole } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Redirect href="/auth" />;
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
 
   const fetchQuestions = async () => {
     try {
@@ -58,9 +69,8 @@ export default function Reports() {
     fetchQuestions();
   }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
+  const answeredQuestions = questions.filter((q) => q.status === "answered");
+  const pendingQuestions = questions.filter((q) => q.status === "pending");
 
   return (
     <ScrollView
@@ -74,8 +84,8 @@ export default function Reports() {
           <Title>Contact us</Title>
         </Header>
 
-        <View>
-          <View className=" border-b-2 border-slate-50 p-5 flex gap-y-5 ">
+        <View className="p-5">
+          <View className="border-b-2 border-slate-50 flex gap-y-5 mb-5">
             <Text className="text-base dark:text-gray-300 mb-5">
               Have any questions about this conference? Don't hesitate and reach
               out!
@@ -87,34 +97,56 @@ export default function Reports() {
               />
             </View>
           </View>
-          <View className="flex w-full p-5 ">
-            <Text className="text-lg font-bold mb-2">History</Text>
-            {questions.length > 0 ? (
-              questions.map((question) => (
-                <View
-                  key={question.id}
-                  className="mb-3 p-4 bg-sky-50 rounded-md"
-                >
-                  <Text className="text-lg dark:text-gray-200 font-semibold">
-                    {question.question}
-                  </Text>
-                  {question.status === "pending" ? (
-                    <Text className="dark:text-gray-400 text-center bg-white rounded-md border-sky-200 font-bold text-lg border-2 p-2 mt-2">
-                      We'll get to you soon!
+
+          {answeredQuestions.length > 0 && (
+            <>
+              <Text className="text-lg font-bold mb-5">Answered</Text>
+              <View className="flex w-full rounded-md border-2 border-neutral-100 bg-neutral-50 mb-5">
+                {answeredQuestions.map((question, index) => (
+                  <View
+                    key={question.id}
+                    className={`p-4 w-full border-slate-100 justify-between flex flex-row items-center ${
+                      index === answeredQuestions.length - 1 ? "" : "border-b-2"
+                    }`}
+                  >
+                    <Text className="text-sm dark:text-gray-200 font-semibold">
+                      {question.question}
                     </Text>
-                  ) : (
-                    <Text className="dark:text-gray-400 text-center bg-white rounded-md border-green-200 font-bold text-lg border-2 p-2 mt-2">
-                      Click to see the answer
+                    <AntDesign
+                      className="color-black dark:color-white text-4xl"
+                      name="right"
+                      size={15}
+                    />
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
+
+          {pendingQuestions.length > 0 && (
+            <>
+              <Text className="text-lg font-bold mb-5">Pending</Text>
+              <View className="flex w-full rounded-md border-2 border-neutral-100 bg-neutral-50">
+                {pendingQuestions.map((question, index) => (
+                  <View
+                    key={question.id}
+                    className={`p-4 w-full border-slate-100 justify-between flex flex-row items-center ${
+                      index === pendingQuestions.length - 1 ? "" : "border-b-2"
+                    }`}
+                  >
+                    <Text className="text-sm dark:text-gray-200 font-semibold">
+                      {question.question}
                     </Text>
-                  )}
-                </View>
-              ))
-            ) : (
-              <Text className="text-base dark:text-gray-300">
-                No questions available
-              </Text>
-            )}
-          </View>
+                    <AntDesign
+                      className="color-black dark:color-white text-4xl"
+                      name="right"
+                      size={15}
+                    />
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
         </View>
       </View>
     </ScrollView>
