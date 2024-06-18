@@ -94,6 +94,24 @@ function RootLayout() {
             headerTintColor: headerStyle.color,
           }}
         />
+        <Stack.Screen
+          name="questions"
+          options={{
+            headerShown: true,
+            title: "Questions",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
+        <Stack.Screen
+          name="questionForm"
+          options={{
+            headerShown: true,
+            title: "Ask a question",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
       </Stack>
     </View>
   );

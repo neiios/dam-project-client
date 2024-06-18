@@ -109,7 +109,7 @@ export default function Reports() {
             </Text>
             <View>
               <Button
-                title="Ask a question"
+                title="Request information"
                 onPress={() =>
                   router.push({
                     pathname: "../contact",
