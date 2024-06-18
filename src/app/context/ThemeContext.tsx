@@ -1,16 +1,36 @@
-// context/ThemeContext.tsx
-import React, { createContext, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useColorScheme } from "nativewind";
 
 interface ThemeContextType {
   colorScheme: "light" | "dark";
-  toggleColorScheme: () => void;
+  toggleColorScheme: (theme: "light" | "dark") => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const {
+    colorScheme: systemColorScheme,
+    setColorScheme: nativewindSetColorScheme,
+  } = useColorScheme();
+  const [colorScheme, setColorScheme] = useState<"light" | "dark">(
+    systemColorScheme
+  );
+
+  useEffect(() => {
+    setColorScheme(systemColorScheme);
+  }, [systemColorScheme]);
+
+  const toggleColorScheme = (theme: "light" | "dark") => {
+    setColorScheme(theme);
+    nativewindSetColorScheme(theme);
+  };
 
   return (
     <ThemeContext.Provider value={{ colorScheme, toggleColorScheme }}>
