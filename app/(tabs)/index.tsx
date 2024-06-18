@@ -1,5 +1,12 @@
-import { View, Text, ScrollView, Image, RefreshControl } from "react-native";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { Conference } from "@/types";
 import { calculateDuration, formatDateRange } from "@/core/utils";
@@ -11,10 +18,13 @@ import Title from "@/components/title";
 import { useTheme } from "../context/ThemeContext";
 import Error from "@/components/error";
 import { useAuth } from "../context/AuthContext";
+import { router } from "expo-router";
 
 export default function ConferenceDetails() {
   const route = useRoute();
   const { confId } = route.params as { confId: string };
+
+  const { isAuthenticated, userRole } = useAuth();
 
   const { colorScheme } = useTheme();
 
@@ -144,6 +154,18 @@ export default function ConferenceDetails() {
           </View>
         </View>
       </ScrollView>
+
+      {isAuthenticated && userRole === "admin" ? (
+        <View className="absolute bottom-8 right-8 flex items-center">
+          <TouchableOpacity
+            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            activeOpacity={0.8}
+            onPress={() => router.push(`/admin/conferences/${confId}`)}
+          >
+            <MaterialIcons color="white" name="edit" size={32} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 }
