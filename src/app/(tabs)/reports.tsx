@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import Title from "@/components/title";
 import React, { useCallback, useEffect, useState } from "react";
 import { Text, ScrollView, View, RefreshControl } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from "@/components/loader";
 
@@ -47,9 +47,11 @@ export default function Reports() {
     }
   };
 
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchQuestions();
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
