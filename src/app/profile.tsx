@@ -58,7 +58,7 @@ export default function Profile() {
     "light" | "dark" | "system"
   >("system");
 
-  const { isAuthenticated, validateAuth } = useAuth();
+  const { isAuthenticated, validateAuth, userRole } = useAuth();
 
   async function handleLogout() {
     await AsyncStorage.removeItem("jwtToken");
@@ -159,7 +159,25 @@ export default function Profile() {
             />
           </TouchableOpacity>
         </View>
-        <Button title="Sign out" onPress={handleLogout} />
+
+        <View className="gap-y-4">
+          {isAuthenticated && userRole === "admin" ? (
+            <View>
+              <Button
+                title="Requests"
+                onPress={() => router.push("/admin/requests")}
+              />
+            </View>
+          ) : null}
+          <View>
+            <Button
+              bgColor="bg-red-500"
+              title="Sign out"
+              onPress={handleLogout}
+            />
+          </View>
+        </View>
+
         <Modal
           animationType="fade"
           transparent={true}

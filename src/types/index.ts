@@ -14,6 +14,15 @@ export interface Conference {
   city?: string;
 }
 
+export interface Request {
+  id: number;
+  question: string;
+  answer: string;
+  status: "answered" | "pending";
+  conferenceId: number;
+  userId: number;
+}
+
 export interface Article {
   id: number;
   title: string;

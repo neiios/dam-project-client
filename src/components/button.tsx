@@ -4,12 +4,17 @@ import { TouchableOpacity, Text } from "react-native";
 type ButtonProps = {
   title: string;
   onPress: () => void;
+  bgColor?: string;
 };
 
-export default function Button({ title, onPress }: ButtonProps) {
+export default function Button({
+  title,
+  onPress,
+  bgColor = "bg-sky-700",
+}: ButtonProps) {
   return (
     <TouchableOpacity
-      className="bg-sky-700 py-2 px-4 rounded-xl w-full"
+      className={`${bgColor} py-2 px-4 rounded-xl w-full`}
       onPress={onPress}
       activeOpacity={0.8}
     >
