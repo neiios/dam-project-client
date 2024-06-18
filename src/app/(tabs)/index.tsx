@@ -5,8 +5,9 @@ import {
   Image,
   RefreshControl,
   TouchableOpacity,
+  Share,
 } from "react-native";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { Conference } from "@/types";
 import { calculateDuration, formatDateRange } from "@/core/utils";
@@ -37,6 +38,30 @@ export default function ConferenceDetails() {
     `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${confId}`
   );
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Check out this conference: ${
+          conference?.name
+        }\n\nDescription: ${conference?.description}\n\nDate: ${formatDateRange(
+          conference!.startDate,
+          conference!.endDate
+        )}\n\nLocation: ${conference?.city}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log(`Shared with activity type: ${result.activityType}`);
+        } else {
+          console.log("Shared successfully");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log("Share dismissed");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -56,7 +81,17 @@ export default function ConferenceDetails() {
         <View>
           <View>
             <Header>
-              <Title> {conference?.name}</Title>
+              <View className="flex flex-row justify-between items-center">
+                <Title> {conference?.name}</Title>
+                <TouchableOpacity activeOpacity={0.7} onPress={onShare}>
+                  <View className="flex flex-row items-center gap-x-2 bg-sky-100  py-1 rounded-md">
+                    <View className="pl-1">
+                      <Octicons name="share-android" size={13} />
+                    </View>
+                    <Text className="font-bold text-xs pr-2">Share </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </Header>
             <View className="p-5 flex gap-y-5">
               {conference?.imageUrl && (
