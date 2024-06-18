@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/app/context/AuthContext";
-import { Request } from "@/types";
+import { Question } from "@/types";
 
 export default function Page() {
   const { isAuthenticated, userRole } = useAuth();
@@ -15,15 +15,15 @@ export default function Page() {
   }, [isAuthenticated, userRole]);
 
   const params = useLocalSearchParams();
-  const requestId = params.requestId;
+  const questionId = params.questionId;
 
-  const [request, setRequest] = useState<Request>();
+  const [question, setQuestion] = useState<Question>();
 
   useEffect(() => {
-    async function fetchRequest() {
+    async function fetchQuestion() {
       const jwtToken = await AsyncStorage.getItem("jwtToken");
       const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/requests/${requestId}`,
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/${questionId}`,
         {
           method: "GET",
           headers: {
@@ -35,52 +35,80 @@ export default function Page() {
 
       if (response.ok) {
         const data = await response.json();
-        setRequest(data);
+        setQuestion(data);
       }
     }
 
-    fetchRequest();
-  }, [requestId]);
+    fetchQuestion();
+  }, [questionId]);
 
   const handleSubmit = async () => {
     const jwtToken = await AsyncStorage.getItem("jwtToken");
     const response = await fetch(
-      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/requests/${requestId}`,
+      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/${questionId}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwtToken}`,
         },
-        body: JSON.stringify(request),
+        body: JSON.stringify(question),
       }
     );
 
     if (response.ok) {
-      router.push("/admin/requests");
+      router.push("/admin/questions");
     }
   };
+
+  async function handleRemove(requestId: number | undefined) {
+    if (requestId === undefined) return;
+
+    const jwtToken = await AsyncStorage.getItem("jwtToken");
+    const response = await fetch(
+      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/${requestId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      router.back();
+    }
+  }
 
   return (
     <ScrollView className="bg-white h-full pt-20 gap-y-4 px-6">
       <View className="flex">
         <Text className="text-4xl font-bold mb-12 text-center">
-          Answer Conference Question
+          Answer Article Question
         </Text>
 
         <View className="gap-y-8">
-          <Text className="text-2xl text-center">{request?.question}</Text>
+          <Text className="text-2xl text-center">{question?.question}</Text>
 
           <TextInput
             className="w-full border border-gray-300 p-2 rounded-md mb-3 h-24"
             placeholder="Description"
             onChangeText={(text) =>
-              request ? setRequest({ ...request, answer: text }) : null
+              question ? setQuestion({ ...question, answer: text }) : null
             }
             multiline
           />
 
           <Button title="Submit" onPress={handleSubmit} />
+
+          <View className="mt-4">
+            <Button
+              title="Remove"
+              bgColor="bg-red-500"
+              onPress={() => handleRemove(question?.id)}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>

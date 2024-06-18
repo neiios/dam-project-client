@@ -23,6 +23,15 @@ export interface Request {
   userId: number;
 }
 
+export interface Question {
+  id: number;
+  question: string;
+  answer: string;
+  status: "answered" | "pending";
+  articleId: number;
+  userId: number;
+}
+
 export interface Article {
   id: number;
   title: string;
