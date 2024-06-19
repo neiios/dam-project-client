@@ -81,6 +81,11 @@ export const calculateDuration = (startDate: string, endDate: string) => {
   const diff = end.getTime() - start.getTime();
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (minutes === 0) {
+    return `${hours} hour${hours !== 1 ? "s" : ""}`;
+  }
+
   return `${hours} hour${hours !== 1 ? "s" : ""} ${minutes} minute${
     minutes !== 1 ? "s" : ""
   }`;
