@@ -109,7 +109,7 @@ export default function Articles() {
               onChangeText={onChangeQuery}
               placeholder="Search Articles"
               placeholderTextColor="#94a3b8"
-              className="text-slate-400 w-full box-content border-2 border-slate-100 focus:border-sky-200 rounded-md pl-10 py-2"
+              className="text-slate-400 w-full box-content border-2 border-slate-100 focus:border-sky-200 dark:border-slate-600 dark:focus:border-sky-600 rounded-md pl-10 py-2"
               value={searchQuery}
               onSubmitEditing={() => fetchArticles(true)}
             />
@@ -128,18 +128,18 @@ export default function Articles() {
                     pathname: "article",
                     params: { articleId: article.id, confId: confId },
                   }}
-                  className="bg-sky-50 rounded-md"
+                  className="bg-sky-50 dark:bg-neutral-800 rounded-md"
                 >
                   <View className="flex w-full p-2">
                     <View className="flex flex-row gap-x-a2"></View>
                     <Text
-                      className="text-lg font-bold mb-2 flex w-72 "
+                      className="text-lg font-bold mb-2 flex w-72 text-black dark:text-slate-100"
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
                       {article.title}
                     </Text>
-                    <Text className="text-xs text-slate-500">
+                    <Text className="text-xs text-slate-500 dark:text-slate-100">
                       {formatDate(article.startDate, article.endDate)}
                     </Text>
                   </View>
@@ -147,7 +147,7 @@ export default function Articles() {
               ))
             : !loading && (
                 <View className="p-5">
-                  <Text className="text-lg text-center text-slate-500">
+                  <Text className="text-lg text-center text-slate-500 dark:text-slate-100">
                     No articles available
                   </Text>
                 </View>
