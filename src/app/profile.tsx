@@ -163,18 +163,49 @@ export default function Profile() {
         <View className="gap-y-4">
           {isAuthenticated && userRole === "admin" ? (
             <View>
-              <Button
-                title="Requests"
-                onPress={() => router.push("/admin/requests")}
-              />
-            </View>
-          ) : null}
-          {isAuthenticated && userRole === "admin" ? (
-            <View>
-              <Button
-                title="Questions"
-                onPress={() => router.push("/admin/questions")}
-              />
+              <View>
+                <Text className="font-bold text-base mb-7 text-black dark:text-gray-300">
+                  Backoffice
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => router.push("/admin/questions")}
+                  activeOpacity={0.8}
+                >
+                  <View className="flex flex-row gap-x-5 items-center mb-7">
+                    <View className="dark:bg-gray-300 rounded-full p-2">
+                      <AntDesign name="questioncircleo" size={25} />
+                    </View>
+                    <View>
+                      <Text className="font-bold text-base text-black dark:text-gray-300">
+                        Questions
+                      </Text>
+                      <Text className="text-base text-black dark:text-gray-300">
+                        View all article questions
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => router.push("/admin/requests")}
+                  activeOpacity={0.8}
+                >
+                  <View className="flex flex-row gap-x-5 items-center mb-7">
+                    <View className="dark:bg-gray-300 rounded-full p-2">
+                      <AntDesign name="message1" size={25} />
+                    </View>
+                    <View>
+                      <Text className="font-bold text-base text-black dark:text-gray-300">
+                        Reuqests
+                      </Text>
+                      <Text className="text-base text-black dark:text-gray-300">
+                        View all information requests
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           ) : null}
           <View>
