@@ -63,7 +63,7 @@ export default function FeedScreen() {
               >
                 <View className="p-5 flex-row items-center justify-between">
                   <View className="flex gap-y-2 w-52">
-                    <Text className="text-lg font-bold capitalize text-black dark:text-neutral-300">
+                    <Text className="text-lg font-bold text-black dark:text-neutral-300">
                       {conference.name}
                     </Text>
                     <View className="flex flex-row gap-x-2">
