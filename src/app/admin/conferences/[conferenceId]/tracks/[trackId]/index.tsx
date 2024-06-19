@@ -4,6 +4,8 @@ import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/app/context/AuthContext";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 export default function Page() {
   const { isAuthenticated, userRole } = useAuth();
@@ -98,26 +100,28 @@ export default function Page() {
   };
 
   return (
-    <ScrollView className="bg-white h-full pt-20 gap-y-4 px-6">
-      <View className="flex items-center">
-        <Text className="text-4xl font-bold mb-12">Edit Track</Text>
+    <ScrollView className="bg-white">
+      <Header>
+        <Title>Edit track</Title>
+      </Header>
 
+      <View className="p-5 flex gap-y-5">
         <TextInput
-          className="w-full border border-gray-300 p-2 rounded-lg mb-3"
+          className="w-full border border-gray-300 p-2 rounded-lg"
           placeholder="Track Name"
           value={formData.name}
           onChangeText={(text) => setFormData({ ...formData, name: text })}
         />
 
         <TextInput
-          className="w-full border border-gray-300 p-2 rounded-lg mb-3"
+          className="w-full border border-gray-300 p-2 rounded-lg"
           placeholder="Room"
           value={formData.room}
           onChangeText={(text) => setFormData({ ...formData, room: text })}
         />
 
         <TextInput
-          className="w-full border border-gray-300 p-2 rounded-md mb-3 h-24"
+          className="w-full border border-gray-300 p-2 rounded-md mb-5 h-24"
           placeholder="Description"
           value={formData.description}
           onChangeText={(text) =>

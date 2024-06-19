@@ -16,6 +16,8 @@ import {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 export default function Page() {
   const { isAuthenticated, userRole } = useAuth();
@@ -151,10 +153,11 @@ export default function Page() {
   }
 
   return (
-    <SafeAreaView className="h-full bg-white flex-1">
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <Text className="font-bold text-2xl mb-4">Edit Article</Text>
-
+    <ScrollView className=" bg-white">
+      <Header>
+        <Title>Edit article</Title>
+      </Header>
+      <View className="p-5 flex gap-y-5 ">
         <TextInput
           className="w-full border border-gray-300 p-2 rounded-md mb-3"
           placeholder="Article Title"
@@ -227,7 +230,7 @@ export default function Page() {
         </View>
 
         <Button title="Submit" onPress={handleSubmit} />
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </ScrollView>
   );
 }

@@ -8,7 +8,7 @@ import { useRoute } from "@react-navigation/native";
 import Loader from "@/components/loader";
 import Header from "@/components/header";
 import Title from "@/components/title";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/AuthContext";
 
 export default function TrackDetails() {
@@ -115,13 +115,13 @@ export default function TrackDetails() {
       {isAuthenticated && userRole === "admin" ? (
         <View className="absolute bottom-28 right-8 flex items-center">
           <TouchableOpacity
-            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            className="bg-sky-700 p-4 rounded-full w-full"
             activeOpacity={0.8}
             onPress={() =>
               router.push(`/admin/conferences/${confId}/tracks/${trackId}`)
             }
           >
-            <MaterialIcons color="white" name="edit" size={32} />
+            <AntDesign name="form" color="white" size={25} />
           </TouchableOpacity>
         </View>
       ) : null}
@@ -129,7 +129,7 @@ export default function TrackDetails() {
       {isAuthenticated && userRole === "admin" ? (
         <View className="absolute bottom-8 right-8 flex items-center">
           <TouchableOpacity
-            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            className="bg-sky-700 p-4 rounded-full w-full"
             activeOpacity={0.8}
             onPress={() =>
               router.push(
@@ -137,7 +137,7 @@ export default function TrackDetails() {
               )
             }
           >
-            <Ionicons color="white" name="add" size={32} />
+            <AntDesign color="white" name="plus" size={25} />
           </TouchableOpacity>
         </View>
       ) : null}

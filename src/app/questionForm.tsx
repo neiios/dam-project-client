@@ -77,7 +77,7 @@ export default function QuestionForm() {
       statement="Hi! We're here to help you get the most out of this article/conference talk. If
       you have any questions or thoughts, please don't hesitate to reach
       out. Your curiosity is welcome!"
-      placeholder="Your question regarding the rticle"
+      placeholder="Your question regarding the article"
       header="Contact us"
     />
   );

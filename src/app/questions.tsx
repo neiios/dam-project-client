@@ -120,7 +120,7 @@ export default function Questions() {
             </Text>
             <View>
               <Button
-                title="Request information"
+                title="Ask a question"
                 onPress={() =>
                   router.push({
                     pathname: "questionForm",

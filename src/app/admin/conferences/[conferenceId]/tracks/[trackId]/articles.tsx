@@ -16,6 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import Button from "@/components/button";
 import { useAuth } from "@/app/context/AuthContext";
+import Header from "@/components/header";
+import Title from "@/components/title";
 
 export default function Page() {
   const { isAuthenticated, userRole } = useAuth();
@@ -109,26 +111,28 @@ export default function Page() {
   }
 
   return (
-    <SafeAreaView className="h-full bg-white flex-1">
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <Text className="font-bold text-2xl mb-4">Submit Article</Text>
+    <ScrollView className="bg-white">
+      <Header>
+        <Title>Submit article</Title>
+      </Header>
 
+      <View className="p-5 flex gap-y-5">
         <TextInput
-          className="w-full border border-gray-300 p-2 rounded-md mb-3"
+          className="w-full border border-gray-300 p-2 rounded-md"
           placeholder="Article Title"
           value={article.title}
           onChangeText={(text) => setArticle({ ...article, title: text })}
         />
 
         <TextInput
-          className="w-full border border-gray-300 p-2 rounded-md mb-3"
+          className="w-full border border-gray-300 p-2 rounded-md"
           placeholder="Authors (comma-separated)"
           value={article.authors}
           onChangeText={(text) => setArticle({ ...article, authors: text })}
         />
 
         <TextInput
-          className="w-full border border-gray-300 p-2 rounded-md mb-3"
+          className="w-full border border-gray-300 p-2 rounded-md"
           placeholder="Abstract"
           value={article.abstract}
           multiline={true}
@@ -136,7 +140,7 @@ export default function Page() {
           onChangeText={(text) => setArticle({ ...article, abstract: text })}
         />
 
-        <View className="flex-row justify-between mb-4">
+        <View className="flex-row justify-between ">
           <View>
             <Button
               title="Pick Start Date"
@@ -160,7 +164,7 @@ export default function Page() {
           </View>
         </View>
 
-        <View className="flex-row justify-between mb-4">
+        <View className="flex-row justify-between mb-5">
           <View>
             <Button
               title="Pick End Date"
@@ -185,7 +189,7 @@ export default function Page() {
         </View>
 
         <Button title="Submit" onPress={handleSubmit} />
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </ScrollView>
   );
 }
