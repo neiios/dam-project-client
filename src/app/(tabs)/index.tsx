@@ -21,7 +21,6 @@ import { useTheme } from "@/app/context/ThemeContext";
 import Error from "@/components/error";
 import { useAuth } from "@/app/context/AuthContext";
 import { router } from "expo-router";
-import { useState } from "react";
 
 export default function ConferenceDetails() {
   const route = useRoute();
@@ -64,7 +63,7 @@ export default function ConferenceDetails() {
     }
   };
 
-  const openGoogleMaps = (latitude, longitude) => {
+  const openGoogleMaps = (latitude: string, longitude: string) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
     Linking.openURL(url).catch((err) =>
       console.error("Error opening Maps", err)
@@ -103,9 +102,7 @@ export default function ConferenceDetails() {
               </View>
             </Header>
             <View className="p-5 flex gap-y-5">
-              {conference?.imageUrl && (
-                <ImageWithFallback imageUrl={conference.imageUrl} />
-              )}
+              <ImageWithFallback imageUrl={conference?.imageUrl} />
               <View>
                 <Text className="text-lg font-bold mb-2 text-black dark:text-gray-300">
                   About this event
@@ -227,18 +224,17 @@ export default function ConferenceDetails() {
   );
 }
 
-const ImageWithFallback = ({ imageUrl }: { imageUrl: string }) => {
-  const [imageLoaded, setImageLoaded] = useState(true);
+const ImageWithFallback = ({ imageUrl }: { imageUrl: string | undefined }) => {
+  const urlValid = imageUrl && imageUrl !== "";
 
   return (
     <Image
       className="w-full h-52 rounded-md mt-5"
       source={
-        imageLoaded
+        urlValid
           ? { uri: imageUrl }
           : require("../../assets/images/fallback-light.png")
       }
-      onError={() => setImageLoaded(false)}
     />
   );
 };
