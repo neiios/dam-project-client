@@ -34,6 +34,7 @@ Also make sure the ports are open in your firewall.
 
 ## TODO
 
+1. [ ] Endpoint for user questions (on articles page) should return just pending questions. This way, under pending will be just user's questions and under "Questions" all of the answered ones, from all users
 1. [ ] Fallback img for conferences
 1. [ ] Add dark theme
 1. [ ] Fix admim page styling
