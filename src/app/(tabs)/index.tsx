@@ -189,11 +189,11 @@ export default function ConferenceDetails() {
       {isAuthenticated && userRole === "admin" ? (
         <View className="absolute bottom-8 right-8 flex items-center">
           <TouchableOpacity
-            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            className="bg-sky-700 p-4 rounded-full w-full"
             activeOpacity={0.8}
             onPress={() => router.push(`/admin/conferences/${confId}`)}
           >
-            <MaterialIcons color="white" name="edit" size={32} />
+            <AntDesign name="form" color="white" size={25} />
           </TouchableOpacity>
         </View>
       ) : null}

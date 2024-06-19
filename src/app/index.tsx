@@ -12,7 +12,7 @@ import { truncateTrackList, formatDate } from "@/core/utils";
 import { useFetchData } from "@/core/hooks";
 import Loader from "@/components/loader";
 import Button from "@/components/button";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/AuthContext";
 import { useState } from "react";
 
@@ -100,11 +100,11 @@ export default function FeedScreen() {
       {isAuthenticated && userRole === "admin" ? (
         <View className="absolute bottom-8 right-8 flex items-center">
           <TouchableOpacity
-            className="bg-sky-700 py-4 px-4 rounded-xl w-full"
+            className="bg-sky-700 p-4 rounded-full w-full"
             activeOpacity={0.8}
             onPress={() => router.push("/admin/conferences")}
           >
-            <Ionicons color="white" name="add" size={32} />
+            <AntDesign color="white" name="plus" size={25} />
           </TouchableOpacity>
         </View>
       ) : null}
