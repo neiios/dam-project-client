@@ -23,6 +23,17 @@ export interface Request {
   userId: number;
 }
 
+export interface FatRequest {
+  id: number;
+  question: string;
+  answer?: string;
+  status: "answered" | "pending";
+  conferenceId: number;
+  userId: number;
+  conference: Conference;
+  user: User;
+}
+
 export interface Question {
   id: number;
   question: string;
@@ -30,6 +41,17 @@ export interface Question {
   status: "answered" | "pending";
   articleId: number;
   userId: number;
+}
+
+export interface FatQuestion {
+  id: number;
+  question: string;
+  answer: string;
+  status: "answered" | "pending";
+  articleId: number;
+  userId: number;
+  user: User;
+  article: Article;
 }
 
 export interface Article {
@@ -97,14 +119,6 @@ export interface User {
   email: string;
   name: string;
   role: "admin" | "user";
-}
-
-export interface Question {
-  id: number;
-  questions: string;
-  answer: string;
-  status: "pending" | "answered";
-  articleId: number;
 }
 
 export interface ArticleAnswer {}

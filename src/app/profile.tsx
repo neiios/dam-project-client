@@ -51,6 +51,8 @@ export default function Profile() {
   const [user, setUser] = useState<User>();
   const [modalVisible, setModalVisible] = useState(false);
 
+  // dont touch this one
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { colorScheme, toggleColorScheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState<
     "light" | "dark" | "system"
@@ -164,6 +166,14 @@ export default function Profile() {
               <Button
                 title="Requests"
                 onPress={() => router.push("/admin/requests")}
+              />
+            </View>
+          ) : null}
+          {isAuthenticated && userRole === "admin" ? (
+            <View>
+              <Button
+                title="Questions"
+                onPress={() => router.push("/admin/questions")}
               />
             </View>
           ) : null}

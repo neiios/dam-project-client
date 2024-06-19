@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { router } from "expo-router";
 import { useAuth } from "@/app/context/AuthContext";
-import { FatRequest } from "@/types";
+import { FatQuestion } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "@/components/button";
 
@@ -14,14 +14,14 @@ export default function Page() {
     }
   }, [isAuthenticated, userRole]);
 
-  const [requests, setRequests] = useState<FatRequest[]>([]);
-  const pendingRequests = requests.filter((r) => r.status === "pending");
-  const answeredRequests = requests.filter((r) => r.status === "answered");
+  const [questions, setQuestions] = useState<FatQuestion[]>([]);
+  const pendingQuestions = questions.filter((r) => r.status === "pending");
+  const answeredQuestions = questions.filter((r) => r.status === "answered");
 
   useEffect(() => {
-    async function fetchRequests() {
+    async function fetchQuestions() {
       const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/requests`,
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions`,
         {
           method: "GET",
           headers: {
@@ -33,17 +33,17 @@ export default function Page() {
 
       if (response.ok) {
         const data = await response.json();
-        setRequests(data);
+        setQuestions(data);
       }
     }
 
-    fetchRequests();
+    fetchQuestions();
   }, []);
 
-  async function handleRemove(requestId: number) {
+  async function handleRemove(questionId: number) {
     const jwtToken = await AsyncStorage.getItem("jwtToken");
     const response = await fetch(
-      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/requests/${requestId}`,
+      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/${questionId}`,
       {
         method: "DELETE",
         headers: {
@@ -54,8 +54,8 @@ export default function Page() {
     );
 
     if (response.ok) {
-      const updatedRequests = requests.filter((r) => r.id !== requestId);
-      setRequests(updatedRequests);
+      const updatedQuestions = questions.filter((r) => r.id !== questionId);
+      setQuestions(updatedQuestions);
     }
   }
 
@@ -63,31 +63,31 @@ export default function Page() {
     <ScrollView className="bg-white min-h-full px-10">
       <View className="flex-col items-center">
         <Text className="text-4xl font-bold mb-8 mt-10 text-center">
-          Requests
+          Questions
         </Text>
 
-        <Text className="text-2xl font-bold mb-4">Pending Requests</Text>
+        <Text className="text-2xl font-bold mb-4">Pending Questions</Text>
 
-        {pendingRequests.length === 0 ? (
+        {pendingQuestions.length === 0 ? (
           <Text className="text-lg text-center w-full">
-            No pending requests
+            No pending questions
           </Text>
         ) : null}
 
         <View className="flex items-center w-full">
-          {pendingRequests.map((request) => (
+          {pendingQuestions.map((question) => (
             <View
-              key={request.id}
+              key={question.id}
               className="border border-neutral-300 p-4 rounded-lg shadow-md flex items-center w-full mb-4"
             >
               <View className="border-b border-neutral-300 w-full flex items-center gap-y-4">
                 <Text className="text-xl text-center font-bold border-b w-full p-2 border-neutral-300">
-                  {request.question}
+                  {question.question}
                 </Text>
 
-                <Text>User: {request.user.name} </Text>
+                <Text>User: {question.user.name} </Text>
 
-                <Text>Conference: {request.conference.name}</Text>
+                <Text>Article: {question.article.title}</Text>
 
                 <Text className="mb-4 text-center ">
                   Status: Waiting for an answer
@@ -99,44 +99,48 @@ export default function Page() {
                   <Button
                     title="Remove"
                     bgColor="bg-red-500"
-                    onPress={() => handleRemove(request.id)}
+                    onPress={() => handleRemove(question.id)}
                   />
                 </View>
 
                 <View>
                   <Button
                     title="Answer"
-                    onPress={() => router.push(`/admin/requests/${request.id}`)}
+                    onPress={() =>
+                      router.push(
+                        `/admin/articles/${question.articleId}/questions/${question.id}`
+                      )
+                    }
                   />
                 </View>
               </View>
             </View>
           ))}
 
-          <Text className="text-2xl font-bold mb-4">Answered Requests</Text>
+          <Text className="text-2xl font-bold mb-4">Answered Questions</Text>
 
-          {answeredRequests.length === 0 ? (
+          {answeredQuestions.length === 0 ? (
             <Text className="text-lg text-center w-full">
-              No answered requests
+              No answered questions
             </Text>
           ) : null}
 
-          {answeredRequests.map((request) => (
+          {answeredQuestions.map((question) => (
             <View
-              key={request.id}
+              key={question.id}
               className="border border-neutral-300 p-4 rounded-lg shadow-md flex items-center w-full mb-4"
             >
               <View className="border-b border-neutral-300 w-full flex items-center gap-y-4">
                 <Text className="text-xl text-center font-bold border-b w-full p-2 border-neutral-300">
-                  {request.question}
+                  {question.question}
                 </Text>
 
-                <Text>User: {request.user.name} </Text>
+                <Text>User: {question.user.name} </Text>
 
-                <Text>Conference: {request.conference.name}</Text>
+                <Text>Article: {question.article.title}</Text>
 
                 <Text className="mb-4 text-center ">
-                  Answer: {request.answer}
+                  Answer: {question.answer}
                 </Text>
               </View>
 
@@ -145,7 +149,7 @@ export default function Page() {
                   <Button
                     title="Remove"
                     bgColor="bg-red-500"
-                    onPress={() => handleRemove(request.id)}
+                    onPress={() => handleRemove(question.id)}
                   />
                 </View>
               </View>
