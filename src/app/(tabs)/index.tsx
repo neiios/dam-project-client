@@ -20,6 +20,7 @@ import { useTheme } from "@/app/context/ThemeContext";
 import Error from "@/components/error";
 import { useAuth } from "@/app/context/AuthContext";
 import { router } from "expo-router";
+import { useState } from "react";
 
 export default function ConferenceDetails() {
   const route = useRoute();
@@ -95,12 +96,7 @@ export default function ConferenceDetails() {
             </Header>
             <View className="p-5 flex gap-y-5">
               {conference?.imageUrl && (
-                <Image
-                  className="w-full h-52 rounded-md"
-                  source={{
-                    uri: conference.imageUrl,
-                  }}
-                />
+                <ImageWithFallback imageUrl={conference.imageUrl} />
               )}
               <View>
                 <Text className="text-lg font-bold mb-2 text-black dark:text-gray-300">
@@ -204,3 +200,19 @@ export default function ConferenceDetails() {
     </View>
   );
 }
+
+const ImageWithFallback = ({ imageUrl }: { imageUrl: string }) => {
+  const [imageLoaded, setImageLoaded] = useState(true);
+
+  return (
+    <Image
+      className="w-full h-52 rounded-md mt-5"
+      source={
+        imageLoaded
+          ? { uri: imageUrl }
+          : require("../../assets/images/fallback-light.png")
+      }
+      onError={() => setImageLoaded(false)}
+    />
+  );
+};

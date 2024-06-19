@@ -14,6 +14,7 @@ import Loader from "@/components/loader";
 import Button from "@/components/button";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/AuthContext";
+import { useState } from "react";
 
 export default function FeedScreen() {
   const { isAuthenticated, userRole } = useAuth();
@@ -51,7 +52,6 @@ export default function FeedScreen() {
       >
         <View className="flex w-full">
           {conferences && conferences.length > 0 ? (
-            // TODO: AAAAAAA this really needs to be a separate component
             conferences.map((conference) => (
               <Link
                 key={conference.id}
@@ -85,12 +85,7 @@ export default function FeedScreen() {
                       {conference.city}
                     </Text>
                   </View>
-                  <Image
-                    className="w-32 h-20 rounded-md"
-                    source={{
-                      uri: conference.imageUrl,
-                    }}
-                  />
+                  <ImageWithFallback imageUrl={conference.imageUrl} />
                 </View>
               </Link>
             ))
@@ -116,3 +111,19 @@ export default function FeedScreen() {
     </View>
   );
 }
+
+const ImageWithFallback = ({ imageUrl }: { imageUrl: string }) => {
+  const [imageLoaded, setImageLoaded] = useState(true);
+
+  return (
+    <Image
+      className="w-32 h-20 rounded-md"
+      source={
+        imageLoaded
+          ? { uri: imageUrl }
+          : require("../assets/images/fallback-light.png")
+      }
+      onError={() => setImageLoaded(false)}
+    />
+  );
+};
