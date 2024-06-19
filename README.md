@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This repository hosts the client-side component of the project. For the server-side code, please refer to a separate repository [here](https://github.com/neiios/dam-project-server).
+
 ## Set up project
 
 First make sure you have at least Node.js 20 and npm installed.
@@ -17,10 +20,8 @@ npm install
 Create .env file in root directory and add the IP address and port your backend is running on:
 
 ```sh
-EXPO_PUBLIC_API_BASE=69.69.69.69:8080
+EXPO_PUBLIC_API_BASE=192.168.21.111:8080
 ```
-
-Make sure the backend is running correctly and the database is populated with some test data.
 
 Start project:
 
@@ -28,16 +29,7 @@ Start project:
 npm run start
 ```
 
-Then scan QR code with Expo GO app.
-Make sure that your devices are on the same network.
-Also make sure the ports are open in your firewall.
+After starting the project:
 
-## TODO
-
-1. [ ] Endpoint for user questions (on articles page) should return just pending questions. This way, under pending will be just user's questions and under "Questions" all of the answered ones, from all users
-1. [ ] Fallback img for conferences
-1. [ ] Add dark theme
-1. [ ] Fix admim page styling
-1. [ ] Test the application
-1. [ ] ???
-1. [ ] PROFIT
+- Scan QR code with `Expo Go` app.
+- Make sure that your devices are on the same network and that the ports are open in your firewall.
