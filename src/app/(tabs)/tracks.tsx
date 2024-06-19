@@ -14,7 +14,7 @@ import Loader from "@/components/loader";
 import Header from "@/components/header";
 import Title from "@/components/title";
 import Error from "@/components/error";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/AuthContext";
 
 export default function Tracks() {
@@ -30,7 +30,7 @@ export default function Tracks() {
     error,
     refresh,
   } = useFetchData<Track[]>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/1/tracks`
+    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${confId}/tracks`
   );
 
   const onRefresh = useCallback(() => {
