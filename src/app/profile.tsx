@@ -197,7 +197,7 @@ export default function Profile() {
                     </View>
                     <View>
                       <Text className="font-bold text-base text-black dark:text-gray-300">
-                        Reuqests
+                        Requests
                       </Text>
                       <Text className="text-base text-black dark:text-gray-300">
                         View all information requests
