@@ -1,23 +1,10 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
-} from "react-native";
-import React, { FC, useCallback, useEffect, useState } from "react";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { View, Text, ScrollView, RefreshControl } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import { useFetchData } from "@/core/hooks";
-import { ConferenceRequest, Question } from "@/types";
-import { formatDate } from "@/core/utils";
 import Loader from "@/components/loader";
-import Title from "@/components/title";
 import Header from "@/components/header";
-import { useAuth } from "@/app/context/AuthContext";
-import { Link, router } from "expo-router";
-import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Request } from "@/types";
 
 export default function Answer() {
   const route = useRoute();
@@ -27,7 +14,7 @@ export default function Answer() {
   };
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [request, setRequest] = useState<ConferenceRequest>([]);
+  const [request, setRequest] = useState<Request>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchRequest = async () => {
@@ -47,7 +34,7 @@ export default function Answer() {
         throw new Error("Failed to fetch questions");
       }
 
-      const data: ConferenceRequest = await response.json();
+      const data: Request = await response.json();
       setRequest(data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -82,10 +69,10 @@ export default function Answer() {
             </View>
           </Header>
           <View className="p-5  ">
-            {request.status === "answered" ? (
+            {request!.status === "answered" ? (
               <View className="border-neutral-100 border-2 bg-neutral-50 p-2 rounded-md">
                 <Text className="text-lg font-bold mb-1">Answer</Text>
-                <Text>{request.answer}</Text>
+                <Text>{request!.answer}</Text>
               </View>
             ) : (
               <Text>Our team will soon get to your request.</Text>

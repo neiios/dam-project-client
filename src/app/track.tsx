@@ -11,8 +11,6 @@ import Title from "@/components/title";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/AuthContext";
 
-// i can't take it anymore
-
 export default function TrackDetails() {
   const route = useRoute();
 

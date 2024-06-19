@@ -2,11 +2,8 @@ import { View, Text, ScrollView, RefreshControl } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { Request } from "@/types";
-
 import Loader from "@/components/loader";
-
 import Header from "@/components/header";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Answer() {
@@ -17,12 +14,9 @@ export default function Answer() {
   };
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [question, setQuestion] = useState<Request>([]);
+  const [question, setQuestion] = useState<Request>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  console.log(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${parentId}/questions/${requestId}`
-  );
   const fetchRequest = async () => {
     try {
       const response = await fetch(
@@ -75,10 +69,10 @@ export default function Answer() {
             </View>
           </Header>
           <View className="p-5  ">
-            {question.status === "answered" ? (
+            {question!.status === "answered" ? (
               <View className="border-neutral-100 border-2 bg-neutral-50 p-2 rounded-md">
                 <Text className="text-lg font-bold mb-1">Answer</Text>
-                <Text>{question.answer}</Text>
+                <Text>{question!.answer}</Text>
               </View>
             ) : (
               <Text>Our team will soon get to your request.</Text>

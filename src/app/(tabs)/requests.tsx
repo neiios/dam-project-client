@@ -1,5 +1,3 @@
-// pages/reports.tsx
-
 import React, { useCallback, useEffect, useState } from "react";
 import { Text, ScrollView, View, RefreshControl } from "react-native";
 import { Redirect, useRouter, useFocusEffect } from "expo-router";

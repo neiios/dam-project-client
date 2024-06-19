@@ -1,24 +1,13 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
-} from "react-native";
+import { View, Text, ScrollView, RefreshControl } from "react-native";
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
-import { useFetchData } from "@/core/hooks";
-import { Question, Request } from "@/types";
-import { formatDate } from "@/core/utils";
+import { Request } from "@/types";
 import Loader from "@/components/loader";
 import Title from "@/components/title";
 import Header from "@/components/header";
-import { useAuth } from "@/app/context/AuthContext";
-import { Link, router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import Button from "@/components/button";
 import QuestionBox from "@/components/QuestionBox";
-import Error from "@/components/error";
 
 export default function Questions() {
   const route = useRoute();
@@ -46,7 +35,7 @@ export default function Questions() {
       console.error("Error fetching questions:", error);
     } finally {
       setLoading(false);
-      setRefreshing(false); // Ensure refreshing state is reset
+      setRefreshing(false);
     }
   };
 

@@ -51,8 +51,6 @@ export default function Profile() {
   const [user, setUser] = useState<User>();
   const [modalVisible, setModalVisible] = useState(false);
 
-  // i dont want to touch this shit
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { colorScheme, toggleColorScheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState<
     "light" | "dark" | "system"
