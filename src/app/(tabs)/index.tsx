@@ -6,8 +6,9 @@ import {
   RefreshControl,
   TouchableOpacity,
   Share,
+  Linking, // Import Linking API
 } from "react-native";
-import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
+import { AntDesign, Octicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { Conference } from "@/types";
 import { calculateDuration, formatDateRange } from "@/core/utils";
@@ -61,6 +62,13 @@ export default function ConferenceDetails() {
     } catch (error) {
       console.error("Error sharing:", error);
     }
+  };
+
+  const openGoogleMaps = (latitude, longitude) => {
+    const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+    Linking.openURL(url).catch((err) =>
+      console.error("Error opening Maps", err)
+    );
   };
 
   if (loading) {
@@ -164,15 +172,33 @@ export default function ConferenceDetails() {
                 <Text className="text-lg font-bold mb-2 text-black dark:text-gray-300">
                   Where to find us
                 </Text>
-                <View className="flex flex-row gap-x-2">
-                  <AntDesign
-                    name="find"
-                    size={20}
-                    color={colorScheme === "dark" ? "white" : "black"}
-                  />
-                  <Text className="font-semibold text-black dark:text-gray-300">
-                    {conference?.city}
-                  </Text>
+                <View className="flex flex-row items-center">
+                  <View className="flex flex-row gap-x-2">
+                    <AntDesign
+                      name="find"
+                      size={20}
+                      color={colorScheme === "dark" ? "white" : "black"}
+                    />
+                    <Text className="font-semibold text-black dark:text-gray-300">
+                      {conference?.city}
+                    </Text>
+                  </View>
+                  <View className="w-full items-start flex flex-row ">
+                    <TouchableOpacity
+                      onPress={() =>
+                        openGoogleMaps(
+                          conference!.latitude,
+                          conference!.longitude
+                        )
+                      }
+                      activeOpacity={0.8}
+                    >
+                      <Text className="text-blue-500 dark:bg-sky-900 rounded-md  font-bold">
+                        {" "}
+                        (Go to Google Maps)
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <View className="h-52 mt-5">
                   <Map
