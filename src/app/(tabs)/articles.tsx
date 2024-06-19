@@ -39,8 +39,6 @@ export default function Articles() {
 
       setLoading(true);
       try {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
         const response = await fetch(
           `http://${
             process.env.EXPO_PUBLIC_API_BASE
@@ -74,7 +72,7 @@ export default function Articles() {
 
   useEffect(() => {
     fetchArticles(true);
-  }, [confId, searchQuery, fetchArticles]);
+  }, [confId, searchQuery]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -123,7 +121,7 @@ export default function Articles() {
 
         <View className="flex w-full gap-y-4 p-5">
           {articles && articles.length > 0
-            ? articles.map((article, index) => (
+            ? articles.map((article) => (
                 <Link
                   key={article.id}
                   href={{
