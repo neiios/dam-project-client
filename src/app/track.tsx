@@ -74,7 +74,7 @@ export default function TrackDetails() {
               <View className="flex w-full gap-y-5">
                 {Object.keys(articlesByDate).map((date) => (
                   <View key={date}>
-                    <Text className="text-lg font-bold mb-2">{date}</Text>
+                    <Text className="text-sm font-bold mb-3">{date}</Text>
                     <View className="flex w-full gap-y-4">
                       {articlesByDate[date].map((article: Article) => (
                         <Link
