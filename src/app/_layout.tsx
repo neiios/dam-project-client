@@ -33,9 +33,13 @@ function RootLayout() {
             headerStyle: { backgroundColor: headerStyle.backgroundColor },
             headerTintColor: headerStyle.color,
             headerRight: () =>
-              isAuthenticated && ( // Conditionally render the profile icon
+              isAuthenticated ? (
                 <Link href="/profile">
                   <AntDesign name="user" size={24} color={headerStyle.color} />
+                </Link>
+              ) : (
+                <Link href="/auth">
+                  <AntDesign name="login" size={24} color={headerStyle.color} />
                 </Link>
               ),
           }}

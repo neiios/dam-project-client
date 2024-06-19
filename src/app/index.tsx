@@ -49,15 +49,6 @@ export default function FeedScreen() {
           <RefreshControl refreshing={loading} onRefresh={refresh} />
         }
       >
-        {!isAuthenticated && (
-          <View className="w-full px-10 my-4">
-            <Button
-              title="Join us today!"
-              onPress={() => router.push("/auth")}
-            />
-          </View>
-        )}
-
         <View className="flex w-full">
           {conferences && conferences.length > 0 ? (
             // TODO: AAAAAAA this really needs to be a separate component
