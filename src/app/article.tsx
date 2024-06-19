@@ -20,10 +20,14 @@ interface SectionProps {
 const Section: FC<SectionProps> = ({ title, icon, content }) => {
   return (
     <View className="mt-5">
-      <Text className="text-lg font-bold mb-2">{title}</Text>
-      <View className="flex flex-row gap-x-2 items-center pr-5">
+      <Text className="text-lg font-bold mb-2 text-black dark:text-gray-100">
+        {title}
+      </Text>
+      <View className="flex flex-row gap-x-2 items-center pr-5 text-black dark:text-gray-100">
         {icon && <AntDesign name={icon} size={20} />}
-        <Text className="font-semibold">{content}</Text>
+        <Text className="font-semibold text-black dark:text-gray-100">
+          {content}
+        </Text>
       </View>
     </View>
   );
@@ -60,7 +64,7 @@ export default function ArticleDetails() {
   const date = formatDate(article!.startDate, article!.endDate);
 
   return (
-    <View className="min-h-full bg-white">
+    <View className="min-h-full bg-white dark:bg-neutral-900">
       <ScrollView>
         <View>
           <View>
@@ -69,8 +73,12 @@ export default function ArticleDetails() {
             </Header>
             <View className="p-5 flex gap-y-5">
               <View className="mt-5">
-                <Text className="text-lg font-bold mb-2">Abstract</Text>
-                <Text className="leading-5">{article?.abstract}</Text>
+                <Text className="text-lg font-bold mb-2 text-black dark:text-gray-100">
+                  Abstract
+                </Text>
+                <Text className="leading-5 text-black dark:text-gray-100">
+                  {article?.abstract}
+                </Text>
               </View>
 
               <Section title="Date and time" content={date} icon="calendar" />
@@ -81,7 +89,7 @@ export default function ArticleDetails() {
               />
               <Section title="Room" content={article?.track.room} icon="find" />
               <View className="mt-5">
-                <Text className="text-lg font-bold mb-2">
+                <Text className="text-lg font-bold mb-2 text-black dark:text-gray-100">
                   Questions & Answers
                 </Text>
                 <View className="flex items-start">

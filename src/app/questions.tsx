@@ -113,7 +113,7 @@ export default function Questions() {
         </Header>
 
         <View>
-          <View className="border-b-2 p-5 border-slate-50 flex gap-y-5">
+          <View className="border-b-2 p-5 border-slate-50 dark:border-slate-900 flex gap-y-5">
             <Text className="text-base dark:text-gray-300">
               Have any questions about this conference? Don't hesitate and reach
               out!

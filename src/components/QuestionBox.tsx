@@ -23,8 +23,10 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
     <View className="w-full">
       {questions.length > 0 && (
         <>
-          <Text className="text-sm font-bold mb-3">{title}</Text>
-          <View className="flex w-full rounded-md border-2 border-neutral-100 bg-neutral-50 mb-5">
+          <Text className="text-sm font-bold mb-3 dark:text-neutral-100">
+            {title}
+          </Text>
+          <View className="flex w-full rounded-md border-2 border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800 mb-5">
             {questions.map((question, index) => (
               <Link
                 asChild

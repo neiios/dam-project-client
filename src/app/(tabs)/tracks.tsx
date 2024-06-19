@@ -71,13 +71,13 @@ export default function Tracks() {
                   >
                     <View className="p-2 flex-row items-center justify-between">
                       <View className="flex">
-                        <Text className="text-lg font-bold text-slate-500 dark:text-slate-100">
+                        <Text className="text-lg font-bold text-slate-800 dark:text-slate-100">
                           {track.name}
                         </Text>
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
-                          className="text-xs text-slate-500 dark:text-slate-100 w-full"
+                          className="text-xs text-slate-800 dark:text-slate-100 w-full"
                         >
                           {track?.room}
                         </Text>
@@ -85,7 +85,7 @@ export default function Tracks() {
                           <Text
                             numberOfLines={1}
                             ellipsizeMode="tail"
-                            className="text-xs text-slate-500 dark:text-slate-100 w-full"
+                            className="text-xs text-slate-800 dark:text-slate-100 w-full"
                           >
                             {track.description}
                           </Text>
@@ -96,7 +96,7 @@ export default function Tracks() {
                 ))
               ) : (
                 <View className="p-5">
-                  <Text className="text-lg text-center text-slate-500 dark:text-slate-100">
+                  <Text className="text-lg text-center text-slate-800 dark:text-slate-100">
                     No tracks available
                   </Text>
                 </View>

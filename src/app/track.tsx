@@ -53,28 +53,38 @@ export default function TrackDetails() {
 
   return (
     <View className="h-full">
-      <ScrollView className="bg-white">
+      <ScrollView className="bg-white dark:bg-neutral-900">
         <View>
           <View>
             <Header>
               <Title>Track agenda</Title>
             </Header>
 
-            <View className=" border-b-2 border-slate-50 p-5 flex gap-y-5">
+            <View className=" border-b-2 border-slate-50 dark:border-gray-900 p-5 flex gap-y-5">
               <View>
-                <Text className="text-xl font-bold ">Description</Text>
-                <Text className="text-lg">{track?.description}</Text>
+                <Text className="text-xl font-bold text-black dark:text-gray-100">
+                  Description
+                </Text>
+                <Text className="text-lg text-black dark:text-gray-100">
+                  {track?.description}
+                </Text>
               </View>
               <View>
-                <Text className="text-xl font-bold ">Room</Text>
-                <Text className="text-lg">{track?.room}</Text>
+                <Text className="text-xl font-bold text-black dark:text-gray-100">
+                  Room
+                </Text>
+                <Text className="text-lg text-black dark:text-gray-100">
+                  {track?.room}
+                </Text>
               </View>
             </View>
             <View className="flex w-full p-5 ">
               <View className="flex w-full gap-y-5">
                 {Object.keys(articlesByDate).map((date) => (
                   <View key={date}>
-                    <Text className="text-sm font-bold mb-3">{date}</Text>
+                    <Text className="text-sm font-bold mb-3 text-black dark:text-gray-100">
+                      {date}
+                    </Text>
                     <View className="flex w-full gap-y-4">
                       {articlesByDate[date].map((article: Article) => (
                         <Link
@@ -86,18 +96,18 @@ export default function TrackDetails() {
                               confId: confId,
                             },
                           }}
-                          className="bg-sky-50 rounded-md"
+                          className="bg-sky-50 dark:bg-neutral-800 rounded-md"
                         >
                           <View className="flex w-full p-2">
-                            <View className="flex flex-row gap-x-a2"></View>
+                            <View className="flex flex-row gap-x-a2 text-black dark:text-gray-100"></View>
                             <Text
-                              className="text-lg font-bold mb-2 flex w-72 "
+                              className="text-lg font-bold mb-2 flex w-72 text-black dark:text-gray-100"
                               numberOfLines={1}
                               ellipsizeMode="tail"
                             >
                               {article.title}
                             </Text>
-                            <Text className="text-xs text-slate-500">
+                            <Text className="text-xs text-slate-500 dark:text-gray-100">
                               {formatDate(article.startDate, article.endDate)}
                             </Text>
                           </View>
