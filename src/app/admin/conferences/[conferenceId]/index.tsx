@@ -154,7 +154,7 @@ export default function Page() {
         </Header>
         <View className="p-5 flex gap-y-5">
           <TextInput
-            className="w-full border border-gray-300 p-2 rounded-lg mb-3"
+            className="w-full border border-gray-300 p-2 rounded-lg"
             placeholder="Conference Name"
             value={conference.name}
             onChangeText={(text) =>
@@ -182,7 +182,7 @@ export default function Page() {
           </View>
 
           <TextInput
-            className="w-full border border-gray-300 p-2 rounded-lg mb-3"
+            className="w-full border border-gray-300 p-2 rounded-lg"
             placeholder="Latitude"
             value={conference.latitude.toString()}
             onChangeText={(text) =>
@@ -191,7 +191,7 @@ export default function Page() {
             keyboardType="numeric"
           />
           <TextInput
-            className="w-full border border-gray-300 p-2 rounded-lg mb-3"
+            className="w-full border border-gray-300 p-2 rounded-lg"
             placeholder="Longitude"
             value={conference.longitude.toString()}
             onChangeText={(text) =>
@@ -201,7 +201,7 @@ export default function Page() {
           />
 
           <TextInput
-            className="w-full border border-gray-300 p-2 rounded-lg mb-3"
+            className="w-full border border-gray-300 p-2 rounded-lg"
             placeholder="Image URL"
             value={conference.imageUrl}
             onChangeText={(text) =>
@@ -209,7 +209,7 @@ export default function Page() {
             }
           />
           <TextInput
-            className={`w-full border border-gray-300 p-2 rounded-md mb-3 h-[${height}]]`}
+            className={`w-full border border-gray-300 p-2 rounded-md  h-[${height}]]`}
             placeholder="Description"
             editable
             multiline
