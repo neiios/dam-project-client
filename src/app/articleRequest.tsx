@@ -73,7 +73,7 @@ export default function Answer() {
             {question!.status === "answered" ? (
               <View className="border-neutral-100 border-2 bg-neutral-50 p-2 rounded-md">
                 <Text className="text-lg font-bold mb-1">Answer</Text>
-                <Text>{question!.answer}</Text>
+                <Text className="leading-5">{question!.answer}</Text>
               </View>
             ) : (
               <Text>Our team will soon get to your request.</Text>
