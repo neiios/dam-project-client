@@ -68,7 +68,11 @@ export default function ArticleDetails() {
               <Title>{article?.title}</Title>
             </Header>
             <View className="p-5 flex gap-y-5">
-              <Section title="Abstract" content={article?.abstract} />
+              <View className="mt-5">
+                <Text className="text-lg font-bold mb-2">Abstract</Text>
+                <Text className="leading-5">{article?.abstract}</Text>
+              </View>
+
               <Section title="Date and time" content={date} icon="calendar" />
               <Section
                 title="Speakers"
