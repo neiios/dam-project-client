@@ -5,9 +5,10 @@ import { Request } from "@/types";
 import Loader from "@/components/loader";
 import Title from "@/components/title";
 import Header from "@/components/header";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import Button from "@/components/button";
 import QuestionBox from "@/components/QuestionBox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Questions() {
   const route = useRoute();
@@ -16,10 +17,11 @@ export default function Questions() {
   };
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Request[]>([]);
+  const [allQuestions, setAllQuestions] = useState<Request[]>([]);
+  const [pendingQuestions, setPendingQuestions] = useState<Request[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchQuestions = async () => {
+  const fetchAllQuestions = async () => {
     try {
       const response = await fetch(
         `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions`
@@ -30,7 +32,7 @@ export default function Questions() {
       }
 
       const data: Request[] = await response.json();
-      setQuestions(data);
+      setAllQuestions(data);
     } catch (error) {
       console.error("Error fetching questions:", error);
     } finally {
@@ -39,13 +41,47 @@ export default function Questions() {
     }
   };
 
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
+  const fetchPendingQuestions = async () => {
+    try {
+      const token = await AsyncStorage.getItem("jwtToken");
+      if (!token) throw new Error("No token found");
+
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions/user`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch questions");
+      }
+
+      const data: Request[] = await response.json();
+      setPendingQuestions(data);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllQuestions();
+      fetchPendingQuestions();
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchQuestions();
+    fetchAllQuestions();
+    fetchPendingQuestions();
   }, []);
 
   if (loading) {
@@ -84,7 +120,13 @@ export default function Questions() {
           </View>
           <View className="p-5">
             <QuestionBox
-              questions={questions}
+              questions={pendingQuestions}
+              title="Pending"
+              parentId={articleId}
+              path="articleRequest"
+            />
+            <QuestionBox
+              questions={allQuestions}
               title="Questions"
               parentId={articleId}
               path="articleRequest"

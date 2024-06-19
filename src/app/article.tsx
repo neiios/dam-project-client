@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useFetchData } from "@/core/hooks";
@@ -37,8 +37,6 @@ export default function ArticleDetails() {
   };
 
   const { isAuthenticated, userRole } = useAuth();
-  const [questionCount, setQuestionCount] = useState<number>(0);
-
   const {
     data: article,
     loading,
@@ -58,26 +56,6 @@ export default function ArticleDetails() {
       </View>
     );
   }
-
-  const fetchQuestionCount = async () => {
-    try {
-      const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions/count`,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch questions");
-      }
-
-      const data: number = await response.json();
-      setQuestionCount(data);
-    } catch (error) {
-      console.error("Error fetching questions:", error);
-    }
-  };
 
   const date = formatDate(article!.startDate, article!.endDate);
 
@@ -110,9 +88,7 @@ export default function ArticleDetails() {
                     }}
                     className="font-semibold active:opacity-50 text-blue-700"
                   >
-                    {questionCount
-                      ? `See all questions (${questionCount})`
-                      : "Be the first to ask a questions"}
+                    See all questions
                   </Link>
                 </View>
               </View>

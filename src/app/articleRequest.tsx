@@ -18,6 +18,7 @@ export default function Answer() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchRequest = async () => {
+    console.log(route);
     try {
       const response = await fetch(
         `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${parentId}/questions/${requestId}`,
