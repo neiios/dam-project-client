@@ -132,7 +132,11 @@ export default function Articles() {
                 >
                   <View className="flex w-full p-2">
                     <View className="flex flex-row gap-x-a2"></View>
-                    <Text className="text-lg font-bold mb-2">
+                    <Text
+                      className="text-lg font-bold mb-2 flex w-72 "
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
                       {article.title}
                     </Text>
                     <Text className="text-xs text-slate-500">

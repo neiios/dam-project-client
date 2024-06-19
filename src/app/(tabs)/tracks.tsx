@@ -71,9 +71,7 @@ export default function Tracks() {
                   >
                     <View className="p-2 flex-row items-center justify-between">
                       <View className="flex">
-                        <Text className="text-lg font-bold capitalize">
-                          {track.name}
-                        </Text>
+                        <Text className="text-lg font-bold">{track.name}</Text>
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
