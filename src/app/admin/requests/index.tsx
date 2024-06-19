@@ -60,26 +60,30 @@ export default function Page() {
   }
 
   return (
-    <View className="bg-white min-h-full flex items-center">
-      <Text className="text-4xl font-bold mb-12 mt-20">Requests</Text>
-      <ScrollView>
-        <View className="flex items-center">
-          {requests.map((request) => (
-            <View
-              key={request.id}
-              className="border border-neutral-300 p-4 rounded-lg shadow-md w-full mb-4"
-            >
+    <ScrollView className="bg-white min-h-full px-10">
+      <Text className="text-4xl font-bold mb-8 mt-10 text-center">
+        Requests
+      </Text>
+      <View className="flex items-center">
+        {requests.map((request) => (
+          <View
+            key={request.id}
+            className="border border-neutral-300 p-4 rounded-lg shadow-md flex items-center w-full mb-4"
+          >
+            <View className="border-b border-neutral-300 w-full">
               <Text className="text-xl text-center font-bold">
-                {request.question}
+                Question: {request.question}
               </Text>
 
               {request.status === "answered" ? (
-                <Text className="text-lg mt-4 text-center">
+                <Text className="text-lg mt-4 mb-4 text-center ">
                   Answer: {request.answer}
                 </Text>
               ) : null}
+            </View>
 
-              <View className="mt-8">
+            <View className="w-full mt-4">
+              <View>
                 <Button
                   title="Answer"
                   onPress={() => router.push(`/admin/requests/${request.id}`)}
@@ -94,9 +98,9 @@ export default function Page() {
                 />
               </View>
             </View>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
