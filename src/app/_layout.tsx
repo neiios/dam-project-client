@@ -152,6 +152,15 @@ function RootLayout() {
             headerTintColor: headerStyle.color,
           }}
         />
+        <Stack.Screen
+          name="admin/requests/[requestId]"
+          options={{
+            headerShown: true,
+            title: "Backoffice",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
       </Stack>
     </View>
   );

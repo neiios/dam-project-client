@@ -12,6 +12,7 @@ interface FormProps {
   MAX_MESSAGE_LENGTH: number;
   placeholder: string;
   statement: string;
+  header: string;
 }
 
 const Form: FC<FormProps> = ({
@@ -21,12 +22,13 @@ const Form: FC<FormProps> = ({
   MAX_MESSAGE_LENGTH,
   statement,
   placeholder,
+  header,
 }) => {
   return (
     <ScrollView className="bg-white dark:bg-neutral-900">
       <View>
         <Header>
-          <Title>Contact us</Title>
+          <Title>{header}</Title>
         </Header>
         <View className="p-5">
           <View className="mb-4">

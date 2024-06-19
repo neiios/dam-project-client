@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TextInput } from "react-native";
+import { View, ScrollView } from "react-native";
 import Button from "@/components/button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/app/context/AuthContext";
 import { Request } from "@/types";
+import Form from "@/components/form"; // Import the Form component
 
 export default function Page() {
   const { isAuthenticated, userRole } = useAuth();
@@ -62,26 +63,19 @@ export default function Page() {
   };
 
   return (
-    <ScrollView className="bg-white h-full pt-20 gap-y-4 px-6">
+    <ScrollView className="bg-white ">
       <View className="flex">
-        <Text className="text-4xl font-bold mb-12 text-center">
-          Answer Conference Question
-        </Text>
-
-        <View className="gap-y-8">
-          <Text className="text-2xl text-center">{request?.question}</Text>
-
-          <TextInput
-            className="w-full border border-gray-300 p-2 rounded-md mb-3 h-24"
-            placeholder="Description"
-            onChangeText={(text) =>
-              request ? setRequest({ ...request, answer: text }) : null
-            }
-            multiline
-          />
-
-          <Button title="Submit" onPress={handleSubmit} />
-        </View>
+        <Form
+          message={request?.answer || ""}
+          setMessage={(text: string) =>
+            setRequest((prev) => (prev ? { ...prev, answer: text } : prev))
+          }
+          handleSubmit={handleSubmit}
+          MAX_MESSAGE_LENGTH={200}
+          statement={request?.question || ""}
+          placeholder="Your response"
+          header="Respond to request"
+        />
       </View>
     </ScrollView>
   );

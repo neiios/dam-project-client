@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/app/context/AuthContext";
 import { Question } from "@/types";
+import Form from "@/components/form";
 
 export default function Page() {
   const { isAuthenticated, userRole } = useAuth();
@@ -61,56 +62,19 @@ export default function Page() {
     }
   };
 
-  async function handleRemove(requestId: number | undefined) {
-    if (requestId === undefined) return;
-
-    const jwtToken = await AsyncStorage.getItem("jwtToken");
-    const response = await fetch(
-      `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/questions/${requestId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      }
-    );
-
-    if (response.ok) {
-      router.back();
-    }
-  }
-
   return (
-    <ScrollView className="bg-white h-full pt-20 gap-y-4 px-6">
-      <View className="flex">
-        <Text className="text-4xl font-bold mb-12 text-center">
-          Answer Article Question
-        </Text>
-
-        <View className="gap-y-8">
-          <Text className="text-2xl text-center">{question?.question}</Text>
-
-          <TextInput
-            className="w-full border border-gray-300 p-2 rounded-md mb-3 h-24"
-            placeholder="Description"
-            onChangeText={(text) =>
-              question ? setQuestion({ ...question, answer: text }) : null
-            }
-            multiline
-          />
-
-          <Button title="Submit" onPress={handleSubmit} />
-
-          <View className="mt-4">
-            <Button
-              title="Remove"
-              bgColor="bg-red-500"
-              onPress={() => handleRemove(question?.id)}
-            />
-          </View>
-        </View>
-      </View>
+    <ScrollView className="bg-white">
+      <Form
+        message={question?.answer || ""}
+        setMessage={(text: string) =>
+          setQuestion((prev) => (prev ? { ...prev, answer: text } : prev))
+        }
+        handleSubmit={handleSubmit}
+        MAX_MESSAGE_LENGTH={200}
+        statement={question?.question || ""}
+        placeholder="Your response"
+        header="Answer user question"
+      />
     </ScrollView>
   );
 }

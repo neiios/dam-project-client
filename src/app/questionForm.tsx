@@ -78,6 +78,7 @@ export default function QuestionForm() {
       you have any questions or thoughts, please don't hesitate to reach
       out. Your curiosity is welcome!"
       placeholder="Your question regarding the rticle"
+      header="Contact us"
     />
   );
 }
