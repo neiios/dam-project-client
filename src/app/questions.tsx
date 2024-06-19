@@ -20,6 +20,13 @@ export default function Questions() {
   const [allQuestions, setAllQuestions] = useState<Request[]>([]);
   const [pendingQuestions, setPendingQuestions] = useState<Request[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const checkLoginStatus = async () => {
+    const token = await AsyncStorage.getItem("jwtToken");
+    setIsLoggedIn(!!token);
+    return token;
+  };
 
   const fetchAllQuestions = async () => {
     try {
@@ -41,11 +48,8 @@ export default function Questions() {
     }
   };
 
-  const fetchPendingQuestions = async () => {
+  const fetchPendingQuestions = async (token: string) => {
     try {
-      const token = await AsyncStorage.getItem("jwtToken");
-      if (!token) throw new Error("No token found");
-
       const response = await fetch(
         `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions/user`,
         {
@@ -73,15 +77,23 @@ export default function Questions() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllQuestions();
-      fetchPendingQuestions();
+      checkLoginStatus().then((token) => {
+        fetchAllQuestions();
+        if (token) {
+          fetchPendingQuestions(token);
+        }
+      });
     }, [])
   );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchAllQuestions();
-    fetchPendingQuestions();
+    checkLoginStatus().then((token) => {
+      fetchAllQuestions();
+      if (token) {
+        fetchPendingQuestions(token);
+      }
+    });
   }, []);
 
   if (loading) {
@@ -119,12 +131,14 @@ export default function Questions() {
             </View>
           </View>
           <View className="p-5">
-            <QuestionBox
-              questions={pendingQuestions}
-              title="Pending"
-              parentId={articleId}
-              path="articleRequest"
-            />
+            {isLoggedIn && (
+              <QuestionBox
+                questions={pendingQuestions}
+                title="Pending"
+                parentId={articleId}
+                path="articleRequest"
+              />
+            )}
             <QuestionBox
               questions={allQuestions}
               title="Questions"

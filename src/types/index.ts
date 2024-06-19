@@ -52,6 +52,7 @@ export interface FatQuestion {
   userId: number;
   user: User;
   article: Article;
+  conferenceId: number;
 }
 
 export interface Article {

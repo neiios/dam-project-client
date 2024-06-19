@@ -134,6 +134,24 @@ function RootLayout() {
             headerTintColor: headerStyle.color,
           }}
         />
+        <Stack.Screen
+          name="admin/questions"
+          options={{
+            headerShown: true,
+            title: "Backoffice",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
+        <Stack.Screen
+          name="admin/requests/index"
+          options={{
+            headerShown: true,
+            title: "Backoffice",
+            headerStyle: { backgroundColor: headerStyle.backgroundColor },
+            headerTintColor: headerStyle.color,
+          }}
+        />
       </Stack>
     </View>
   );

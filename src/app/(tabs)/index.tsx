@@ -102,7 +102,7 @@ export default function ConferenceDetails() {
                 <Text className="text-lg font-bold mb-2 text-black dark:text-gray-300">
                   About this event
                 </Text>
-                <Text className="text-lg text-black dark:text-gray-300">
+                <Text className="text-lg text-black dark:text-gray-300 ">
                   {conference?.description}
                 </Text>
               </View>
