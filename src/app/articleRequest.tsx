@@ -1,22 +1,12 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
-} from "react-native";
-import React, { FC, useCallback, useEffect, useState } from "react";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { View, Text, ScrollView, RefreshControl } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import { useFetchData } from "@/core/hooks";
-import { ConferenceRequest, Question } from "@/types";
-import { formatDate } from "@/core/utils";
+import { Request } from "@/types";
+
 import Loader from "@/components/loader";
-import Title from "@/components/title";
+
 import Header from "@/components/header";
-import { useAuth } from "@/app/context/AuthContext";
-import { Link, router } from "expo-router";
-import Button from "@/components/button";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Answer() {
@@ -27,13 +17,16 @@ export default function Answer() {
   };
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [request, setRequest] = useState<ConferenceRequest>([]);
+  const [question, setQuestion] = useState<Request>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  console.log(
+    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${parentId}/questions/${requestId}`
+  );
   const fetchRequest = async () => {
     try {
       const response = await fetch(
-        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/conferences/${parentId}/requests/${requestId}`,
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${parentId}/questions/${requestId}`,
         {
           method: "GET",
           headers: {
@@ -47,8 +40,8 @@ export default function Answer() {
         throw new Error("Failed to fetch questions");
       }
 
-      const data: ConferenceRequest = await response.json();
-      setRequest(data);
+      const data: Request = await response.json();
+      setQuestion(data);
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
@@ -78,14 +71,14 @@ export default function Answer() {
         <View>
           <Header>
             <View className="flex gap-y-2">
-              <Text className="text-xl">{request!.question}</Text>
+              <Text className="text-xl">{question!.question}</Text>
             </View>
           </Header>
           <View className="p-5  ">
-            {request.status === "answered" ? (
+            {question.status === "answered" ? (
               <View className="border-neutral-100 border-2 bg-neutral-50 p-2 rounded-md">
                 <Text className="text-lg font-bold mb-1">Answer</Text>
-                <Text>{request.answer}</Text>
+                <Text>{question.answer}</Text>
               </View>
             ) : (
               <Text>Our team will soon get to your request.</Text>

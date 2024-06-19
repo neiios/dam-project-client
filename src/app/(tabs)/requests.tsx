@@ -128,12 +128,14 @@ export default function Reports() {
             <QuestionBox
               questions={answeredQuestions}
               title="Answered"
-              confId={confId}
+              parentId={confId}
+              path="conferenceRequest"
             />
             <QuestionBox
               questions={pendingQuestions}
               title="Pending"
-              confId={confId}
+              parentId={confId}
+              path="conferenceRequest"
             />
           </View>
         </View>

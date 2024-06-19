@@ -7,13 +7,15 @@ import { Request } from "@/types";
 interface QuestionBoxProps {
   questions: Request[];
   title: string;
-  confId: string;
+  parentId: string;
+  path: string;
 }
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({
   questions,
   title,
-  confId,
+  parentId,
+  path,
 }) => {
   const router = useRouter();
 
@@ -28,8 +30,8 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
                 asChild
                 key={question.id}
                 href={{
-                  pathname: `conferenceRequest`,
-                  params: { requestId: question.id, confId: confId },
+                  pathname: path,
+                  params: { requestId: question.id, parentId: parentId },
                 }}
               >
                 <Pressable>

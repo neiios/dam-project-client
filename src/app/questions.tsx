@@ -5,18 +5,19 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from "react-native";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useFetchData } from "@/core/hooks";
-import { Question } from "@/types";
+import { Question, Request } from "@/types";
 import { formatDate } from "@/core/utils";
 import Loader from "@/components/loader";
 import Title from "@/components/title";
 import Header from "@/components/header";
 import { useAuth } from "@/app/context/AuthContext";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 import Button from "@/components/button";
+import QuestionBox from "@/components/QuestionBox";
 import Error from "@/components/error";
 
 export default function Questions() {
@@ -26,70 +27,82 @@ export default function Questions() {
   };
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<Request[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const {
-    data: questions,
-    loading,
-    error,
-    refresh,
-  } = useFetchData<Question[]>(
-    `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions`
-  );
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(
+        `http://${process.env.EXPO_PUBLIC_API_BASE}/api/v1/articles/${articleId}/questions`
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch questions");
+      }
+
+      const data: Request[] = await response.json();
+      setQuestions(data);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false); // Ensure refreshing state is reset
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
 
   const onRefresh = useCallback(() => {
-    refresh();
-  }, [refresh]);
+    setRefreshing(true);
+    fetchQuestions();
+  }, []);
 
   if (loading) {
     return <Loader />;
   }
 
-  if (error) {
-    return <Error error={error} />;
-  }
-
   return (
-    <View className="min-h-full bg-white">
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View>
-          <Header>
-            <Title>Contact us</Title>
-          </Header>
+    <ScrollView
+      className="bg-white dark:bg-neutral-900"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <View>
+        <Header>
+          <Title>Contact us</Title>
+        </Header>
 
-          <View className="p-5">
-            <View className="border-b-2 border-slate-50 flex gap-y-5 mb-5">
-              <Text className="text-base dark:text-gray-300 mb-5">
-                Have any questions about this article? Don't hesitate and reach
-                out!
-              </Text>
-              <View>
-                <Button
-                  title="Ask a question"
-                  onPress={() =>
-                    router.push({
-                      pathname: "questionForm",
-                      params: { articleId: articleId },
-                    })
-                  }
-                />
-              </View>
+        <View>
+          <View className="border-b-2 p-5 border-slate-50 flex gap-y-5">
+            <Text className="text-base dark:text-gray-300">
+              Have any questions about this conference? Don't hesitate and reach
+              out!
+            </Text>
+            <View>
+              <Button
+                title="Request information"
+                onPress={() =>
+                  router.push({
+                    pathname: "questionForm",
+                    params: { articleId: articleId },
+                  })
+                }
+              />
             </View>
           </View>
-          {questions && questions.length > 0 ? (
-            questions.map((question, index) => <Text>{question.question}</Text>)
-          ) : (
-            <View className="p-5">
-              <Text className="text-lg text-center text-slate-500">
-                No questions available
-              </Text>
-            </View>
-          )}
+          <View className="p-5">
+            <QuestionBox
+              questions={questions}
+              title="Questions"
+              parentId={articleId}
+              path="articleRequest"
+            />
+          </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }

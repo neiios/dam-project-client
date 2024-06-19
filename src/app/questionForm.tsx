@@ -46,7 +46,7 @@ export default function QuestionForm() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ question: "message" }),
+          body: JSON.stringify({ question: message }),
         }
       );
       console.log(response);
