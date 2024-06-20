@@ -13,6 +13,7 @@ import { useFetchData } from "@/core/hooks";
 import Loader from "@/components/loader";
 import { AntDesign } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/AuthContext";
+import { useState } from "react";
 
 export default function FeedScreen() {
   const { isAuthenticated, userRole } = useAuth();
@@ -111,16 +112,17 @@ export default function FeedScreen() {
 }
 
 const ImageWithFallback = ({ imageUrl }: { imageUrl: string }) => {
-  const urlValid = imageUrl && imageUrl !== "";
+  const [imageLoaded, setImageLoaded] = useState(true);
 
   return (
     <Image
       className="w-32 h-20 rounded-md"
       source={
-        urlValid
+        imageLoaded
           ? { uri: imageUrl }
           : require("../assets/images/fallback-light.png")
       }
+      onError={() => setImageLoaded(false)}
     />
   );
 };
